@@ -14,6 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 /**
  * Created by Alan on 2/5/2018.
  */
@@ -38,6 +40,8 @@ public class Widget extends Activity {
     int[] pos;
 
     int height, width;
+
+    List<AppWidgetProviderInfo> infoList;
 
     @SuppressWarnings("deprecated")
     @Override
@@ -69,6 +73,8 @@ public class Widget extends Activity {
         );
 
         pos = findPosition(position);
+
+        infoList = mAppWidgetManager.getInstalledProviders();
 
         if (appWidgetInfo.configure != null) {
             Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE);

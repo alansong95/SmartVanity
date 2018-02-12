@@ -17,13 +17,20 @@
             </intent-filter>
         </activity>
         <activity android:name="com.example.alan.smartvanity.Widget"
-            android:parentActivityName="com.example.alan.smartvanity.MainActivity">
+            android:parentActivityName="com.example.alan.smartvanity.Grid">
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.alan.smartvanity.MainActivity" />
         </activity>
         <activity android:name="com.example.alan.smartvanity.Grid"
+            android:parentActivityName="com.example.alan.smartvanity.SelectWidget">
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.alan.smartvanity.MainActivity" />
+        </activity>
+        <activity android:name="com.example.alan.smartvanity.SelectWidget"
             android:parentActivityName="com.example.alan.smartvanity.MainActivity">
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
