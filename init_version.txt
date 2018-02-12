@@ -1,0 +1,5 @@
+init version:
+
+displays available widgets using listview
+onclick: when clicked, new intent displays the widget
+implemented grid systems
