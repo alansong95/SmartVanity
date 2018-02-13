@@ -26,6 +26,7 @@ public class Grid extends AppCompatActivity {
         selected = myIntent.getStringExtra("Selected");
 
         mainWidget = new Intent(this, MainActivity.class);
+        mainWidget.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         mainWidget.putExtra("Selected", selected);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
