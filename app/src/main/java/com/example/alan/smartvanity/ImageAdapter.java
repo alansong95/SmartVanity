@@ -47,7 +47,7 @@ public class ImageAdapter extends BaseAdapter {
         return imageView;
     }
 
-    // references to images
+    // references to  images
     private Integer[] mThumbIds = {
             R.drawable.box,
             R.drawable.box,

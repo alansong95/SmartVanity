@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -49,10 +50,15 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> providerList;
     ArrayList<Integer> posListL;
     ArrayList<Integer> posListT;
+    ArrayList<Integer> appWidgetIdList;
 
     Button button;
 
     private static final String TAG = "MyActivity";
+
+    int appWidgetId;
+
+    String temp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         providerList = new ArrayList<>();
         posListL = new ArrayList<>();
         posListT = new ArrayList<>();
+        appWidgetIdList = new ArrayList<>();
 
         // get screen width and height
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -89,23 +96,65 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        setIntent(intent);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
-        myIntent = getIntent();
-        if (myIntent.hasExtra("Position")) {
-            selected = myIntent.getStringExtra("Selected");
-            position = myIntent.getExtras().getInt("Position");
-            //textView.setText("Selected: " + selected + "\nPosition: " + position + "\n");
-
-            pos = findPosition(position);
-
-            saveData(selected, pos);
-        }
         if (widgetCount > 0) {
             loadData();
             installWidget();
         }
+
+        int flag = 0;
+        String temp2;
+
+        int newIntent = sharedpreferences.getInt("NewIntent", 0);
+
+        if (newIntent == 1) {
+            myIntent = getIntent();
+
+            if (myIntent.hasExtra("Position")) {
+                for (int i = 0; i < widgetCount; i++) {
+                    temp2 = myIntent.getStringExtra("Selected");
+                    if (temp2.equals(providerList.get(i))) {
+                        flag = 1;
+                        break;
+                    }
+                }
+                if (flag == 1) {
+
+                } else {
+                    providerList.add(myIntent.getStringExtra("Selected"));
+                    position = myIntent.getExtras().getInt("Position");
+                    appWidgetIdList.add(myIntent.getExtras().getInt("WidgetId"));
+                    pos = findPosition(position);
+                    posListL.add(pos[0]);
+                    posListT.add(pos[1]);
+                    widgetCount++;
+
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.putInt("WidgetCount", widgetCount);
+                    editor.putInt("NewIntent", 0);
+                    editor.commit();
+                    saveData();
+                }
+                printList();
+            }
+        }
+
+
+        if (widgetCount > 0) {
+            loadData();
+            installWidget();
+        }
+
+
     }
 
     @Override
@@ -134,23 +183,30 @@ public class MainActivity extends AppCompatActivity {
 
         pos[0] = left;
         pos[1] = top;
-        Toast.makeText(this, width + " " + height + " " + pos[0] +" " +  pos[1], Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, width + " " + height + " " + pos[0] +" " +  pos[1], Toast.LENGTH_SHORT).show();
 
         return pos;
     }
 
-    private void saveData(String selected, int[] pos) {
+    private void saveData() {
         SharedPreferences.Editor editor = sharedpreferences.edit();
-        String key_selected = "selected" + widgetCount;
-        String key_positionL = "positionL" + widgetCount;
-        String key_positionT = "positionT" + widgetCount;
 
-        editor.putString(key_selected, selected);
-        editor.putInt(key_positionL, pos[0]);
-        editor.putInt(key_positionT, pos[1]);
-
-        widgetCount++;
+        editor.clear().commit();
         editor.putInt("WidgetCount", widgetCount);
+
+        Log.i(TAG, "WidgetCount: " + widgetCount);
+
+        for (int i = 0; i < widgetCount; i++) {
+            String key_selected = "selected" + i;
+            String key_positionL = "positionL" + i;
+            String key_positionT = "positionT" + i;
+            String key_id = "id" + i;
+
+            editor.putString(key_selected, providerList.get(i));
+            editor.putInt(key_positionL, posListL.get(i));
+            editor.putInt(key_positionT, posListT.get(i));
+            editor.putInt(key_id, appWidgetIdList.get(i));
+        }
         editor.commit();
     }
 
@@ -160,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
                 providerList.add(sharedpreferences.getString("selected" + i, null));
                 posListL.add(sharedpreferences.getInt("positionL" + i, -1));
                 posListT.add(sharedpreferences.getInt("positionT" + i, -1));
+                appWidgetIdList.add(sharedpreferences.getInt("id" + i, -1));
             }
         }
     }
@@ -167,25 +224,65 @@ public class MainActivity extends AppCompatActivity {
     private void installWidget() {
         infoList = mAppWidgetManager.getInstalledProviders();
 
-        for (int j = 0; j < providerList.size(); j++) {
+        for (int j = 0; j < widgetCount; j++) {
             for (int i = 0; i < infoList.size(); i++) {
-                String temp = infoList.get(i).provider.toString();
+                temp = infoList.get(i).provider.toString();
 
                 if (providerList.get(j).equals(temp)) {
                     appWidgetInfo = infoList.get(i);
+                    break;
                 }
             }
 
-            AppWidgetHostView hostView = mAppWidgetHost.createView(this, 0, appWidgetInfo);
-            hostView.setAppWidget(0, appWidgetInfo);
+            AppWidgetHostView hostView = new AppWidgetHostView(this);
+            hostView = mAppWidgetHost.createView(this, appWidgetIdList.get(j), appWidgetInfo);
+            hostView.setAppWidget(appWidgetIdList.get(j), appWidgetInfo);
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.leftMargin = posListL.get(j);
             params.topMargin = posListT.get(j);
+            hostView.setId(appWidgetIdList.get(j));
+            hostView.setOnLongClickListener(new myListener(temp) {});
 
-            mainLayout.addView(hostView, params);
+            mainLayout.addView(hostView, j, params);
+        }
+    }
+
+    public void printList() {
+        for (int i = 0; i < widgetCount; i++) {
+            Log.i(TAG, "name: " + providerList.get(i));
+            Log.i(TAG, "id: " + appWidgetIdList.get(i));
         }
 
+    }
 
+    class myListener implements View.OnLongClickListener {
+        String selected;
+
+        public myListener(String selected) {
+            this.selected = selected;
+        }
+
+        //delete widget
+        @Override
+        public boolean onLongClick(View view) {
+            for (int i = 0; i < providerList.size(); i++) {
+                String temp2 = providerList.get(i);
+                if (temp2.equals(selected)) {
+                    view.setVisibility(View.GONE);
+
+                    providerList.remove(i);
+                    posListL.remove(i);
+                    posListT.remove(i);
+                    appWidgetIdList.remove(i);
+                    widgetCount--;
+
+                    break;
+                }
+            }
+            Toast.makeText(MainActivity.this, "hello", Toast.LENGTH_SHORT).show();
+            saveData();
+            return false;
+        }
     }
 }

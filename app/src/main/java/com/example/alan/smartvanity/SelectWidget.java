@@ -45,8 +45,9 @@ public class SelectWidget extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                Toast.makeText(SelectWidget.this, infoList.get(i).label , Toast.LENGTH_SHORT).show();
+                int appWidgetId = mAppWidgetHost.allocateAppWidgetId();
+                gridIntent.putExtra("WidgetId", appWidgetId);
+                Toast.makeText(SelectWidget.this, appWidgetId + "" , Toast.LENGTH_SHORT).show();
                 gridIntent.putExtra("Selected", infoList.get(i).provider.toString());
                 startActivity(gridIntent);
                 finish();
