@@ -33,6 +33,7 @@ public class Grid extends AppCompatActivity {
                                     int position, long id) {
                 mainWidget.putExtra("Position", position);
                 startActivity(mainWidget);
+                finish();
             }
         });
     }

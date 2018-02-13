@@ -49,6 +49,7 @@ public class SelectWidget extends AppCompatActivity {
                 Toast.makeText(SelectWidget.this, infoList.get(i).label , Toast.LENGTH_SHORT).show();
                 gridIntent.putExtra("Selected", infoList.get(i).provider.toString());
                 startActivity(gridIntent);
+                finish();
             }
         });
     }
