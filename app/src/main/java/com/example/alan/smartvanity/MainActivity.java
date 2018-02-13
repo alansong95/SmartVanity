@@ -282,7 +282,13 @@ public class MainActivity extends AppCompatActivity {
             }
             Toast.makeText(MainActivity.this, "hello", Toast.LENGTH_SHORT).show();
             saveData();
+            finish();
+            startActivity(getIntent());
             return false;
         }
+    }
+
+    public void printChildViews() {
+
     }
 }
