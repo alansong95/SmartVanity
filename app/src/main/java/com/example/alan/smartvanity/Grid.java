@@ -12,7 +12,7 @@ public class Grid extends AppCompatActivity {
     Intent myIntent;
     String selected;
 
-    Intent widgetIntent;
+    Intent mainWidget;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,14 +25,14 @@ public class Grid extends AppCompatActivity {
         myIntent = getIntent();
         selected = myIntent.getStringExtra("Selected");
 
-        widgetIntent = new Intent(this, Widget.class);
-        widgetIntent.putExtra("Selected", selected);
+        mainWidget = new Intent(this, MainActivity.class);
+        mainWidget.putExtra("Selected", selected);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                widgetIntent.putExtra("Position", position);
-                startActivity(widgetIntent);
+                mainWidget.putExtra("Position", position);
+                startActivity(mainWidget);
             }
         });
     }
