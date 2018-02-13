@@ -42,6 +42,8 @@ public class Widget extends Activity {
 
     List<AppWidgetProviderInfo> infoList;
 
+    String selected;
+
     @SuppressWarnings("deprecated")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,16 +61,28 @@ public class Widget extends Activity {
         mainlayout = (ViewGroup) findViewById(R.id.main_layout);
 
         mAppWidgetHost = new AppWidgetHost(this, R.id.APPWIDGET_HOST_ID);
+        mAppWidgetManager = AppWidgetManager.getInstance(this);
 
         myIntent = getIntent();
-        mAppWidgetManager = AppWidgetManager.getInstance(this);
-        AppWidgetProviderInfo appWidgetInfo = (AppWidgetProviderInfo) myIntent.getParcelableExtra("WidgetInfo");
+        selected = myIntent.getStringExtra("Selected");
         position = myIntent.getExtras().getInt("Position");
-        int appWidgetId = myIntent.getExtras().getInt("WidgetId");
 
         pos = findPosition(position);
 
         infoList = mAppWidgetManager.getInstalledProviders();
+
+        for (int i = 0; i < infoList.size(); i++) {
+            String temp = infoList.get(i).provider.toString();
+
+            if (selected.equals(temp)) {
+                appWidgetInfo = infoList.get(i);
+            }
+        }
+
+
+
+        text.setText(selected);
+
 
         // example setting email accounts
 //        if (appWidgetInfo.configure != null) {

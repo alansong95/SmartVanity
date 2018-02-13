@@ -10,7 +10,7 @@ import android.widget.GridView;
 
 public class Grid extends AppCompatActivity {
     Intent myIntent;
-    AppWidgetProviderInfo appWidgetInfo;
+    String selected;
 
     Intent widgetIntent;
 
@@ -23,12 +23,10 @@ public class Grid extends AppCompatActivity {
         gridview.setAdapter(new ImageAdapter(this));
 
         myIntent = getIntent();
-        appWidgetInfo = (AppWidgetProviderInfo) myIntent.getParcelableExtra("WidgetInfo");
-        int appWidgetId = myIntent.getExtras().getInt("WidgetId");
+        selected = myIntent.getStringExtra("Selected");
 
         widgetIntent = new Intent(this, Widget.class);
-        widgetIntent.putExtra("WidgetInfo", appWidgetInfo);
-        widgetIntent.putExtra("WidgetId", appWidgetId);
+        widgetIntent.putExtra("Selected", selected);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
