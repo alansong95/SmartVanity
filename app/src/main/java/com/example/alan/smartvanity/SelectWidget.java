@@ -20,8 +20,6 @@ public class SelectWidget extends AppCompatActivity {
     AppWidgetManager manager;
     List<AppWidgetProviderInfo> infoList;
 
-    String[] names;
-
     Intent gridIntent;
 
     AppWidgetHost mAppWidgetHost;
@@ -35,12 +33,6 @@ public class SelectWidget extends AppCompatActivity {
 
         manager = AppWidgetManager.getInstance(SelectWidget.this);
         infoList = manager.getInstalledProviders();
-
-        names = new String[infoList.size()];
-
-        for (int i = 0; i < infoList.size(); i++) {
-            names[i] = infoList.get(i).label;
-        }
 
         listAdapter = new ListAdapter(SelectWidget.this);
 
@@ -56,12 +48,10 @@ public class SelectWidget extends AppCompatActivity {
                 int appWidgetId = mAppWidgetHost.allocateAppWidgetId();
 
                 Toast.makeText(SelectWidget.this, infoList.get(i).label , Toast.LENGTH_SHORT).show();
-                gridIntent.putExtra("Selected", names[i]);
-                gridIntent.putExtra("WidgetId", appWidgetId);
                 gridIntent.putExtra("WidgetInfo", infoList.get(i));
+                gridIntent.putExtra("WidgetId", appWidgetId);
                 startActivity(gridIntent);
             }
         });
-
     }
 }

@@ -22,7 +22,6 @@ import java.util.List;
 
 public class Widget extends Activity {
     Intent myIntent;
-    String selected;
 
     TextView text;
 
@@ -57,62 +56,56 @@ public class Widget extends Activity {
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
 
-
         mainlayout = (ViewGroup) findViewById(R.id.main_layout);
 
         mAppWidgetHost = new AppWidgetHost(this, R.id.APPWIDGET_HOST_ID);
 
         myIntent = getIntent();
-        selected = myIntent.getStringExtra("selected");
-        appWidgetId = myIntent.getExtras().getInt("WidgetId");
         mAppWidgetManager = AppWidgetManager.getInstance(this);
         AppWidgetProviderInfo appWidgetInfo = (AppWidgetProviderInfo) myIntent.getParcelableExtra("WidgetInfo");
-        position = myIntent.getExtras().getInt("position");
-
-        text.setText("Selected: " + selected + "\nappWidgetId: " + appWidgetId + "\nPosition: " + position
-        );
+        position = myIntent.getExtras().getInt("Position");
+        int appWidgetId = myIntent.getExtras().getInt("WidgetId");
 
         pos = findPosition(position);
 
         infoList = mAppWidgetManager.getInstalledProviders();
 
-        if (appWidgetInfo.configure != null) {
-            Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE);
-            intent.setComponent(appWidgetInfo.configure);
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            startActivityForResult(intent, R.id.REQUEST_CREATE_APPWIDGET);
-            text.setText("DEBUG 1");
-        } else {
-            AppWidgetHostView hostView = mAppWidgetHost.createView(this, appWidgetId, appWidgetInfo);
-            hostView.setAppWidget(appWidgetId, appWidgetInfo);
+        // example setting email accounts
+//        if (appWidgetInfo.configure != null) {
+//            Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE);
+//            intent.setComponent(appWidgetInfo.configure);
+//            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+//            startActivityForResult(intent, R.id.REQUEST_CREATE_APPWIDGET);
+//        } else {
+            AppWidgetHostView hostView = mAppWidgetHost.createView(this, 0, appWidgetInfo);
+            hostView.setAppWidget(0, appWidgetInfo);
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.leftMargin = pos[0];
             params.topMargin = pos[1];
 
             mainlayout.addView(hostView, params);
-            text.setText("DEBUG 2");
-        }
+        //}
 
 
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            /*if (requestCode == R.id.REQUEST_CREATE_APPWIDGET) {
-                AppWidgetHostView hostView = mAppWidgetHost.createView(this, appWidgetId, appWidgetInfo);
-                hostView.setAppWidget(appWidgetId, appWidgetInfo);
-                mainlayout.addView(hostView);
-            }
-            */
-            text.setText("DEBUG");
-        } else if (resultCode == RESULT_CANCELED && data != null) {
-            int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-            if (appWidgetId != -1) {
-                mAppWidgetHost.deleteAppWidgetId(appWidgetId);
-            }
-        }
-    }
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (resultCode == RESULT_OK) {
+//            /*if (requestCode == R.id.REQUEST_CREATE_APPWIDGET) {
+//                AppWidgetHostView hostView = mAppWidgetHost.createView(this, appWidgetId, appWidgetInfo);
+//                hostView.setAppWidget(appWidgetId, appWidgetInfo);
+//                mainlayout.addView(hostView);
+//            }
+//            */
+//            text.setText("DEBUG");
+//        } else if (resultCode == RESULT_CANCELED && data != null) {
+//            int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+//            if (appWidgetId != -1) {
+//                mAppWidgetHost.deleteAppWidgetId(appWidgetId);
+//            }
+//        }
+//    }
 
     private int[] findPosition(int position) {
         int[] pos = new int[2];
