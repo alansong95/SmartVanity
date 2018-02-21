@@ -53,12 +53,15 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Integer> appWidgetIdList;
 
     Button button;
+    Button videoButton;
 
     private static final String TAG = "MyActivity";
 
     int appWidgetId;
 
     String temp;
+
+    Intent videoIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         mainLayout = (ViewGroup) findViewById(R.id.main_layout);
         textView = (TextView) findViewById(R.id.text_view);
         button = findViewById(R.id.add_button);
+        videoButton = findViewById(R.id.video_button);
 
         mAppWidgetHost = new AppWidgetHost(this, R.id.APPWIDGET_HOST_ID);
         mAppWidgetManager = AppWidgetManager.getInstance(this);
@@ -93,6 +97,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(selectIntent);
             }
         });
+
+        videoIntent = new Intent(this, Video.class);
+
+        videoButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(videoIntent);
+            }
+        });
+
     }
 
     @Override
