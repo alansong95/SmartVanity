@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SmartVanity.iml" filepath="$PROJECT_DIR$/SmartVanity.iml" />
-      <module fileurl="file://C:\Users\Alan\Documents\AndroidStudioProjects\SmartVanity\SmartVanity.iml" filepath="C:\Users\Alan\Documents\AndroidStudioProjects\SmartVanity\SmartVanity.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\Alan\Documents\AndroidStudioProjects\SmartVanity\app\app.iml" filepath="C:\Users\Alan\Documents\AndroidStudioProjects\SmartVanity\app\app.iml" />
     </modules>
   </component>
 </project>
