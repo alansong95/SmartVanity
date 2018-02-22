@@ -2,6 +2,7 @@ package com.example.alan.smartvanity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
@@ -15,7 +16,7 @@ public class Video extends YouTubeBaseActivity implements YouTubePlayer.OnInitia
     private static final int RECOVERY_REQUEST = 1;
     private YouTubePlayerView youTubeView;
 
-    String video = "V2hlQkVJZhE";
+    String video = "";
 
     private MyPlayerStateChangeListener playerStateChangeListener;
     private MyPlaybackEventListener playbackEventListener;
@@ -32,6 +33,10 @@ public class Video extends YouTubeBaseActivity implements YouTubePlayer.OnInitia
 
         youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
         youTubeView.initialize(Config.YOUTUBE_API_KEY, this);
+
+        Bundle extras = getIntent().getExtras();
+        video = extras.getString(Intent.EXTRA_TEXT);
+        video = video.substring(17);
 
         start = 0;
     }

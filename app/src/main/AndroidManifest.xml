@@ -41,6 +41,11 @@
         </activity>
         <activity android:name="com.example.alan.smartvanity.Video"
             android:parentActivityName="com.example.alan.smartvanity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:host="www.youtube.com" android:mimeType="text/*" />
+            </intent-filter>
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
