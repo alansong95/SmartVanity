@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -16,10 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
 
     String selected;
     int position;
-
-    TextView textView;
 
     int height, width;
 
@@ -53,15 +48,12 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Integer> appWidgetIdList;
 
     Button button;
-    Button videoButton;
 
     private static final String TAG = "MyActivity";
 
     int appWidgetId;
 
     String temp;
-
-    Intent videoIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +75,7 @@ public class MainActivity extends AppCompatActivity {
         width = displayMetrics.widthPixels;
 
         mainLayout = (ViewGroup) findViewById(R.id.main_layout);
-        textView = (TextView) findViewById(R.id.text_view);
         button = findViewById(R.id.add_button);
-        videoButton = findViewById(R.id.video_button);
 
         mAppWidgetHost = new AppWidgetHost(this, R.id.APPWIDGET_HOST_ID);
         mAppWidgetManager = AppWidgetManager.getInstance(this);
@@ -95,14 +85,6 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(selectIntent);
-            }
-        });
-
-        videoIntent = new Intent(this, Video.class);
-
-        videoButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(videoIntent);
             }
         });
 
