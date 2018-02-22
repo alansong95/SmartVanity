@@ -2,6 +2,7 @@ package com.example.alan.smartvanity;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +12,11 @@ import android.widget.ImageView;
 import android.widget.EditText;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.AuthResult;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -20,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private static String KEY_SOME_INTEGER = "KEY_SOME_INTEGER";
+    private static String TAG = "SmartVanity";
 
     private FirebaseAuth mAuth;
     private String uiState;
@@ -119,7 +125,12 @@ public class LoginActivity extends AppCompatActivity {
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("Attempted sign in.");
+                if (uiState == "signin") {
+                    System.out.println("Attempted sign in.");
+                } else if (uiState == "signup") {
+                    System.out.println("Attempting sign up.");
+                    attemptSignUp();
+                }
             }
         });
 
@@ -151,6 +162,38 @@ public class LoginActivity extends AppCompatActivity {
             mSignUp.setText("Already have an account?\n\nSIGN IN");
             mSignInTitle.setText("Sign Up");
         }
+    }
+
+    private void attemptSignUp() {
+        String email = mEmailEditText.getText().toString();
+        String pass1 = mPasswordEditText.getText().toString();
+        String pass2 = mConfirmPasswordEditText.getText().toString();
+        String password = "------";
+        if (pass1.equals(pass2)) {
+            password = pass1;
+        } else {
+            password = "";
+        }
+        Log.d(TAG, "email: " + email);
+        Log.d(TAG, "password: " + password);
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
     }
 
     @Override
