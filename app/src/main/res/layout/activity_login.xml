@@ -8,13 +8,13 @@
     tools:context="com.example.alan.smartvanity.LoginActivity">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="384dp"
-        android:layout_height="511dp"
+        android:id="@+id/activity_login_background_image_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
@@ -25,7 +25,7 @@
         android:layout_width="0dp"
 
 
-        android:layout_height="188dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="64dp"
         android:layout_marginStart="64dp"
         android:layout_marginTop="80dp"
@@ -38,7 +38,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
         <TextView
+            android:id="@+id/activity_login_signin_title_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/circularbold"
@@ -53,7 +58,8 @@
             android:layout_height="16dp" />
 
         <EditText
-            android:id="@+id/emailField"
+            android:id="@+id/activity_login_email_edit_text"
+            android:hint="email"
             android:layout_width="220dp"
             android:layout_height="44dp"
             android:background="@drawable/textfieldbackground"
@@ -69,7 +75,26 @@
             android:layout_height="8dp" />
 
         <EditText
-            android:id="@+id/passwordField"
+            android:id="@+id/activity_login_password_edit_text"
+            android:hint="password"
+            android:layout_width="220dp"
+            android:layout_height="44dp"
+            android:background="@drawable/textfieldbackground"
+            android:contentDescription="Password"
+            android:elevation="4dp"
+            android:ems="10"
+            android:fontFamily="@font/circular"
+            android:inputType="textPassword"
+            android:textColor="#4A4A4A"
+            tools:text="123456" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <EditText
+            android:id="@+id/activity_login_confirm_password_edit_text"
+            android:hint="confirm password"
             android:layout_width="220dp"
             android:layout_height="44dp"
             android:background="@drawable/textfieldbackground"
@@ -88,23 +113,41 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/signInButton"
+        android:id="@+id/activity_login_signin_button"
         style="@style/Widget.AppCompat.Button"
         android:layout_width="0dp"
         android:layout_height="44dp"
-        android:layout_marginBottom="220dp"
         android:layout_marginEnd="82dp"
         android:layout_marginStart="82dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/signinbuttonbackground"
+        android:elevation="8dp"
         android:fontFamily="@font/circularbold"
         android:text="Sign In"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="18dp"
-        android:elevation="8dp"
         android:textColor="#EF5A5A"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <TextView
+        android:id="@+id/activity_login_signup_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginStart="100dp"
+        android:elevation="8dp"
+        android:fontFamily="@font/circularbold"
+        android:text="Sign Up"
+        android:textAlignment="center"
+        android:textColor="#EEEEEE"
+        android:textSize="16dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_login_background_image_view"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
