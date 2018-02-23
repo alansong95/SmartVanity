@@ -127,6 +127,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (uiState == "signin") {
                     System.out.println("Attempted sign in.");
+                    attemptSignIn();
                 } else if (uiState == "signup") {
                     System.out.println("Attempting sign up.");
                     attemptSignUp();
@@ -174,8 +175,6 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             password = "";
         }
-        Log.d(TAG, "email: " + email);
-        Log.d(TAG, "password: " + password);
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -184,6 +183,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            gotoHomeActivity();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -194,6 +194,31 @@ public class LoginActivity extends AppCompatActivity {
                         // ...
                     }
                 });
+    }
+
+    private void attemptSignIn() {
+        String email = mEmailEditText.getText().toString();
+        String password = mPasswordEditText.getText().toString();
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "signInWithEmail:success");
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    gotoHomeActivity();
+                } else {
+                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void gotoHomeActivity() {
+        Intent homeActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
+        Bundle stuff = new Bundle();
+        startActivity(homeActivityIntent);
     }
 
     @Override
