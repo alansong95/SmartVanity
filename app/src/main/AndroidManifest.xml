@@ -75,7 +75,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.alan.smartvanity.MainActivity" />
         </activity>
-        <activity android:name=".FirstTimeUser"></activity>
+        <activity android:name=".FirstTimeUserActivity"></activity>
     </application>
 
 </manifest>
