@@ -17,6 +17,9 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     AppWidgetProviderInfo appWidgetInfo;
 
     SharedPreferences sharedpreferences;
+    SharedPreferences id_sharedpreferences;
 
     int widgetCount;
     ArrayList<String> providerList;
@@ -55,12 +59,22 @@ public class MainActivity extends AppCompatActivity {
 
     String temp;
 
+    Button syncButton;
+
+    FirebaseDatabase database;
+
+    Intent login_intent;
+
+    String uid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        id_sharedpreferences = getSharedPreferences("id", Context.MODE_PRIVATE);
         sharedpreferences = getSharedPreferences("data", Context.MODE_PRIVATE);
+
         widgetCount = sharedpreferences.getInt("WidgetCount", 0);
 
         providerList = new ArrayList<>();
@@ -73,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
+
+        login_intent = getIntent();
+
 
         mainLayout = (ViewGroup) findViewById(R.id.main_layout);
         button = findViewById(R.id.add_button);
@@ -88,6 +105,38 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        syncButton = (Button) findViewById(R.id.sync_button);
+
+        database = FirebaseDatabase.getInstance();
+
+        syncButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uid = id_sharedpreferences.getString("uid", "");
+                Log.d("uid", "debug " + uid);
+                DatabaseReference myRef = database.getReference("users");
+
+                myRef= myRef.child(uid).child("widgets");
+                myRef.setValue(null);
+
+                myRef= myRef.child("widget count").child("val");
+                myRef.setValue(Integer.toString(widgetCount));
+
+                for (int i =0; i < widgetCount; i++) {
+                    myRef = myRef.getParent().getParent().child("selected").child("val" + i);
+                    myRef.setValue(providerList.get(i));
+
+                    myRef = myRef.getParent().getParent().child("positionL").child("val" + i);
+                    myRef.setValue(posListL.get(i));
+
+                    myRef = myRef.getParent().getParent().child("positionT").child("val" + i);
+                    myRef.setValue(posListT.get(i));
+                }
+                myRef= myRef.getParent().getParent().child("updated").child("val");
+                myRef.setValue(true);
+
+            }
+        });
     }
 
     @Override
@@ -285,5 +334,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void printChildViews() {
 
+    }
+
+    private void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

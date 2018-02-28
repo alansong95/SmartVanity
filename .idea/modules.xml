@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SmartVanity.iml" filepath="$PROJECT_DIR$/SmartVanity.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$USER_HOME$/github/SmartVanity/app/app.iml" filepath="$USER_HOME$/github/SmartVanity/app/app.iml" />
     </modules>
   </component>
 </project>
