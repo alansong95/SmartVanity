@@ -8,13 +8,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,6 +26,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     Intent selectIntent;
     Intent myIntent;
+
+    Context context = MainActivity.this;
 
     String selected;
     int position;
@@ -88,6 +93,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        populateUI();
+
+    }
+
+    private void populateUI() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setTitle("Your Mirror");
+        actionBar.setDisplayShowTitleEnabled(true);
     }
 
     @Override
@@ -229,8 +244,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            AppWidgetHostView hostView = new AppWidgetHostView(this);
-            hostView = mAppWidgetHost.createView(this, appWidgetIdList.get(j), appWidgetInfo);
+            AppWidgetHostView hostView = new AppWidgetHostView(context);
+            hostView = mAppWidgetHost.createView(context, appWidgetIdList.get(j), appWidgetInfo);
             hostView.setAppWidget(appWidgetIdList.get(j), appWidgetInfo);
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
