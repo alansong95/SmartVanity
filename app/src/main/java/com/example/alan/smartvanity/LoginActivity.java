@@ -1,12 +1,16 @@
 package com.example.alan.smartvanity;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.EditText;
@@ -20,6 +24,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import jp.wasabeef.blurry.Blurry;
+
 public class LoginActivity extends AppCompatActivity {
 
 
@@ -29,6 +35,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private String uiState;
+    private boolean mBackgroundBlurred = false;
+    Context context;
+
 
     ImageView mBackgroundImageView;
     EditText mEmailEditText;
@@ -38,13 +47,10 @@ public class LoginActivity extends AppCompatActivity {
     TextView mSignInTitle;
     Button mSignInButton;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        context = this;
         mAuth = FirebaseAuth.getInstance();
         uiState = "signup";
         setContentView(R.layout.activity_login);
@@ -56,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
         findViews();
         setupListeners();
         populateUI();
-//        FragmentManager
     }
 
     @Override
@@ -68,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
             System.out.println("No user is currently signed in.");
             // No user is signed in.
         } else {
-            gotoHomeActivity();
+            //gotoHomeActivity();
         }
     }
 
@@ -152,6 +157,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private void populateUI() {
         Log.d("SmartVanity", "Populating UI with state: " + uiState);
+
+//        mBackgroundViewGroup = new BlurredBackgroundViewGroup(context);
+//        if (mBackgroundImageView.getParent() != null) {
+//            ((ViewGroup) mBackgroundImageView.getParent()).removeView(mBackgroundImageView);
+//        }
+//        mBackgroundViewGroup.addView(mBackgroundImageView);
+
         if (uiState == "signin") {
             mConfirmPasswordEditText.setVisibility(View.GONE);
             mSignInButton.setText("Sign In");
@@ -162,6 +174,12 @@ public class LoginActivity extends AppCompatActivity {
             mSignInButton.setText("Sign Up");
             mSignUp.setText("Already have an account?\n\nSIGN IN");
             mSignInTitle.setText("Sign Up");
+        }
+
+        if (mBackgroundBlurred) {
+            Log.d(TAG, "Background is already blurred...");
+        } else {
+            blurBackground();
         }
     }
 
@@ -197,6 +215,10 @@ public class LoginActivity extends AppCompatActivity {
     private void attemptSignIn() {
         String email = mEmailEditText.getText().toString();
         String password = mPasswordEditText.getText().toString();
+        if (email.length() == 0 || password.length() == 0) {
+            Log.d(TAG, "Please enter a valid username and password.");
+            return;
+        }
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -238,5 +260,25 @@ public class LoginActivity extends AppCompatActivity {
         if(imm.isAcceptingText()) { // verify if the soft keyboard is open
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
+    }
+
+    private void blurBackground() {
+        mBackgroundImageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (mBackgroundBlurred) {
+                    Log.d(TAG, "Background already blurred...");
+                } else {
+                    Log.d(TAG, "Blurring background...");
+                    Blurry.with(context)
+                            .radius(44)
+                            .async()
+                            .animate(500)
+                            .capture(mBackgroundImageView)
+                            .into(mBackgroundImageView);
+                    mBackgroundBlurred = true;
+                }
+            }
+        });
     }
 }
