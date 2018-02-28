@@ -5,4 +5,5 @@
     <item name="REQUEST_PICK_APPWIDGET" type="id"/>
     <item name="addWidget" type="id"/>
     <item name="removeWidget" type="id"/>
+    <item name="main_layout" type="id"></item>
 </resources>

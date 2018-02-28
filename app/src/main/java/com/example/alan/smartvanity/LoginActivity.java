@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             System.out.println("No user is currently signed in.");
             // No user is signed in.
         } else {
-            //gotoHomeActivity();
+            gotoHomeActivity();
         }
     }
 
