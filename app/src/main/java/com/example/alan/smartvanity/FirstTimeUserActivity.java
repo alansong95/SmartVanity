@@ -1,5 +1,6 @@
 package com.example.alan.smartvanity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +22,11 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import jp.wasabeef.blurry.Blurry;
+
 public class FirstTimeUserActivity extends AppCompatActivity {
+
+    Context context = FirstTimeUserActivity.this;
 
     ImageView mBackgroundImageView;
     EditText mFirstNameEditText;
@@ -33,6 +39,9 @@ public class FirstTimeUserActivity extends AppCompatActivity {
     public String uid;
     public String email;
 
+    private boolean mBackgroundBlurred = false;
+
+    private static final String TAG = "SmartVanity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +49,7 @@ public class FirstTimeUserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_first_time_user);
         findViews();
         setupListeners();
+        populateUI();
     }
 
     private void setupListeners() {
@@ -60,6 +70,10 @@ public class FirstTimeUserActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void populateUI() {
+        blurBackground();
     }
 
     private boolean setUpData() {
@@ -119,5 +133,24 @@ public class FirstTimeUserActivity extends AppCompatActivity {
         if(imm.isAcceptingText()) { // verify if the soft keyboard is open
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
+    }
+
+    private void blurBackground() {
+        mBackgroundImageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (mBackgroundBlurred) {
+                    Log.d(TAG, "Background already blurred...");
+                } else {
+                    Log.d(TAG, "Blurring background...");
+                    Blurry.with(context)
+                            .radius(44)
+                            .animate(500)
+                            .capture(mBackgroundImageView)
+                            .into(mBackgroundImageView);
+                    mBackgroundBlurred = true;
+                }
+            }
+        });
     }
 }

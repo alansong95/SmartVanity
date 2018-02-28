@@ -272,7 +272,6 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "Blurring background...");
                     Blurry.with(context)
                             .radius(44)
-                            .async()
                             .animate(500)
                             .capture(mBackgroundImageView)
                             .into(mBackgroundImageView);
