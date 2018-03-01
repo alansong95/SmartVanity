@@ -213,7 +213,15 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            uid = user.getUid();
+                            SharedPreferences id_sharedpreferences = getSharedPreferences("id", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = id_sharedpreferences.edit();
+                            editor.putString("uid", uid);
+                            editor.commit();
+
                             gotoFirstTimeUserActivity();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -238,11 +246,13 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "signInWithEmail:success");
                     FirebaseUser user = mAuth.getCurrentUser();
                     gotoHomeActivity();
-                    uid = user.getUid();
+
                     SharedPreferences id_sharedpreferences = getSharedPreferences("id", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = id_sharedpreferences.edit();
                     editor.putString("uid", uid);
                     editor.commit();
+
+                    uid = user.getUid();
                 } else {
                     Log.w(TAG, "signInWithEmail:failure", task.getException());
                     Toast.makeText(LoginActivity.this, "Authentication failed.",

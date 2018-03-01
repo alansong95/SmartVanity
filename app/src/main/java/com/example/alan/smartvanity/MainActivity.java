@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
         login_intent = getIntent();
 
-
         mainLayout = (ViewGroup) findViewById(R.id.main_layout);
         button = findViewById(R.id.add_button);
 
