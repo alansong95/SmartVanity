@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -47,6 +48,9 @@ public class LoginActivity extends AppCompatActivity {
     TextView mSignInTitle;
     Button mSignInButton;
 
+
+    String uid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +77,15 @@ public class LoginActivity extends AppCompatActivity {
             System.out.println("No user is currently signed in.");
             // No user is signed in.
         } else {
+
+            uid = currentUser.getUid();
+            SharedPreferences id_sharedpreferences = getSharedPreferences("id", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = id_sharedpreferences.edit();
+            editor.putString("uid", uid);
+            editor.commit();
+
             gotoHomeActivity();
+            // Go to home page.
         }
     }
 
