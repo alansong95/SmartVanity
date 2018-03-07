@@ -11,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 public class Grid extends AppCompatActivity {
     Intent myIntent;
     String selected;
@@ -18,6 +20,8 @@ public class Grid extends AppCompatActivity {
     Intent mainIntent;
 
     int appWidgetId;
+
+    AppWidgetProviderInfo info;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,7 @@ public class Grid extends AppCompatActivity {
         mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         mainIntent.putExtra("Selected", selected);
         mainIntent.putExtra("WidgetId", appWidgetId);
+        mainIntent.putExtra("info", myIntent.getStringExtra("info"));
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,

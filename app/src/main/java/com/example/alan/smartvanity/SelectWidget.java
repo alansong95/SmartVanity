@@ -11,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 
 public class SelectWidget extends AppCompatActivity {
@@ -48,6 +50,9 @@ public class SelectWidget extends AppCompatActivity {
                 int appWidgetId = mAppWidgetHost.allocateAppWidgetId();
                 gridIntent.putExtra("WidgetId", appWidgetId);
                 Toast.makeText(SelectWidget.this, appWidgetId + "" , Toast.LENGTH_SHORT).show();
+                Gson gson = new Gson();
+                String info  = gson.toJson(infoList.get(i));
+                gridIntent.putExtra("info", info);
                 gridIntent.putExtra("Selected", infoList.get(i).provider.toString());
                 startActivity(gridIntent);
                 finish();
