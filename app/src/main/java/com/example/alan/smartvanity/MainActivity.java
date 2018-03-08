@@ -21,8 +21,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.net.URISyntaxException;
@@ -30,10 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends Activity {
-    public static final int REQUEST_PICK_APPWIDGET = 1;
-    public static final int REQUEST_CREATE_APPWIDGET = 2;
-
-
     Intent selectIntent;
     Intent myIntent;
 
@@ -82,6 +81,8 @@ public class MainActivity extends Activity {
     Gson gson;
     int flag;
 
+    RelativeLayout.LayoutParams params;
+
 
     SharedPreferences debug_sharedpreferences;
 
@@ -108,24 +109,35 @@ public class MainActivity extends Activity {
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
 
-        if(flag == 1) {
-            Log.d("hello2", "dbug");
-            Intent data = null;
-            String dataString = debug_sharedpreferences.getString("data", null);
-            try {
-                data = Intent.getIntent(dataString);
-            } catch (java.net.URISyntaxException e) {
-                e.getMessage();
-            }
-            Log.d("hello3", intentToString(data) + "");
+        mAppWidgetHost = new AppWidgetHost(this, R.id.APPWIDGET_HOST_ID);
+        mAppWidgetManager = AppWidgetManager.getInstance(this);
 
-            createWidget(data);
-        }
+        infoList = mAppWidgetManager.getInstalledProviders();
 
-        int id = debug_sharedpreferences.getInt("id", 0);
-        if (id != 0) {
-            loadWidget(id);
-        }
+        mainLayout = (ViewGroup) findViewById(R.id.main_layout);
+
+
+
+//        if(flag == 1) {
+//            Log.d("hello2", "dbug");
+//            Intent data = null;
+//            String dataString = debug_sharedpreferences.getString("data", null);
+//            try {
+//                data = Intent.getIntent(dataString);
+//            } catch (java.net.URISyntaxException e) {
+//                e.getMessage();
+//            }
+//            Log.d("hello3", intentToString(data) + "");
+//
+//            createWidget(data);
+//        }
+
+//        int id = debug_sharedpreferences.getInt("id", 0);
+//        Log.d("hello5", "id:" + id);
+//        if (id != 0) {
+//            Log.d("hello5", "DEBUG");
+//            handleRestoreWidgets();
+//        }
     }
 
 
@@ -134,16 +146,29 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         initialize();
 
-        mainLayout = (ViewGroup) findViewById(R.id.main_layout);
         button = findViewById(R.id.add_button);
 
-        mAppWidgetHost = new AppWidgetHost(this, R.id.APPWIDGET_HOST_ID);
-        mAppWidgetManager = AppWidgetManager.getInstance(this);
+        database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("users");
+        myRef = myRef.child("debug");
 
-        infoList = mAppWidgetManager.getInstalledProviders();
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child("info").exists()) {
+                    Log.d("onDataChange", "Change Detected");
+                    handleRestoreWidgets(dataSnapshot);
+                } else {
+                    Log.d("onDataChange", "Change Detected: deleted?");
+                }
+            }
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         //selectIntent = new Intent(this, SelectWidget.class);
 
@@ -162,7 +187,7 @@ public class MainActivity extends Activity {
         Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
         pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         addEmptyData(pickIntent);
-        startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
+        startActivityForResult(pickIntent, R.integer.REQUEST_PICK_APPWIDGET);
         Log.d("selectWidget", "Ended");
     }
 
@@ -190,7 +215,7 @@ public class MainActivity extends Activity {
 //
 //        if (newIntent == 1) {
 //            myIntent = getIntent();
-//            if (myIntent.hasExtra("Position")) {
+//            if (myIntent.hasExtra("position")) {
 //                for (int i = 0; i < widgetCount; i++) {
 //                    temp2 = myIntent.getStringExtra("Selected");
 //                    if (temp2.equals(providerList.get(i))) {
@@ -203,12 +228,12 @@ public class MainActivity extends Activity {
 //                } else { // if widget is not in the saved list (first time added)
 //                    String selected = myIntent.getStringExtra("Selected");
 //                    providerList.add(myIntent.getStringExtra("Selected"));
-//                    position = myIntent.getExtras().getInt("Position");
+//                    position = myIntent.getExtras().getInt("position");
 //                    appWidgetIdList.add(myIntent.getExtras().getInt("WidgetId"));
 //                    String infoString = myIntent.getStringExtra("info");
 //                    savedInfoList.add(infoString);
 //
-//                    pos = findPosition(position);
+//                    pos = getPosition(position);
 //                    posListL.add(pos[0]);
 //                    posListT.add(pos[1]);
 //                    widgetCount++;
@@ -272,11 +297,11 @@ public class MainActivity extends Activity {
             Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE);
             intent.setComponent(appWidgetInfo.configure);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            startActivityForResult(intent, REQUEST_CREATE_APPWIDGET);
+            startActivityForResult(intent, R.integer.REQUEST_CREATE_APPWIDGET);
             Log.d("configureWidget", "null ended");
         } else {
             Log.d("configureWidget", "else started");
-            createWidget(data);
+
             Log.d("configureWidget", "else ended");
         }
         Log.d("configureWidget", "Ended");
@@ -290,40 +315,104 @@ public class MainActivity extends Activity {
         mainLayout.addView(hostView);
     }
 
+    // pika
+    private void handleAddNewAppWidget( int appWidgetId, AppWidgetProviderInfo info) {
+        AppWidgetHostView hostView = mAppWidgetHost.createView(context.getApplicationContext(), appWidgetId, info);
+        hostView.setAppWidget(appWidgetId, info);
+
+        //hostView.setLayoutParams(params);
+
+        mainLayout.addView(hostView);
+
+        // create widgetHolder
+        String infoString = gson.toJson(info);
+        WidgetHolder holder = new WidgetHolder( appWidgetId, info.minWidth, info.minHeight );
+
+        String serialized = holder.serialize();
+        Log.d("hello9", "debug: " + serialized);
+        Log.d("hello9", "debug: " + info.configure);
+
+        debug_sharedpreferences.edit().putInt("id", appWidgetId).commit();
+        debug_sharedpreferences.edit().putString("data", serialized).commit();
+
+        database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("users");
+        myRef= myRef.child("debug").child("id");
+        myRef.setValue(appWidgetId);
+        myRef= myRef.getParent().child("info");
+        myRef.setValue(serialized);
+
+        // storage is a wrapper for SharedPreferences, the key is the appWidgetId, and the value is the serialized content
+    }
+
+    private void handleRestoreWidgets(DataSnapshot dataSnapshot) {
+        // Retrieve all saved widgets from Storage
+        Log.d("hello8", dataSnapshot.child("id").getValue().toString());
+        int appWidgetId = Integer.parseInt(dataSnapshot.child("id").getValue().toString());
+        Log.d("hello8", dataSnapshot.child("info").getValue().toString());
+        String data = dataSnapshot.child("info").getValue().toString();
+
+        WidgetHolder holder = WidgetHolder.deserialize(data);
+        AppWidgetProviderInfo info = AppWidgetManager
+                .getInstance(this.getApplicationContext() )
+                .getAppWidgetInfo(holder.id);
+        //AppWidgetProviderInfo info = gson.fromJson(holder.info, AppWidgetProviderInfo.class);
+
+        Log.d("hello7", holder.id + "");
+        AppWidgetHostView hostView = mAppWidgetHost.createView(context.getApplicationContext(), holder.id, info);
+        hostView.setAppWidget(appWidgetId, info);
+
+        RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams( holder.width,
+                holder.height );
+        hostView.setLayoutParams(rlp);
+
+        mainLayout.addView(hostView);
+    }
+
     public void createWidget(Intent data) {
         Log.d("createWidget", "started");
         Bundle extras = data.getExtras();
         int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
         AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId);
-
-        AppWidgetHostView hostView = mAppWidgetHost.createView(this, appWidgetId, appWidgetInfo);
-        hostView.setAppWidget(appWidgetId, appWidgetInfo);
-        mainLayout.addView(hostView);
-
-        debug_sharedpreferences.edit().putString("info", gson.toJson(appWidgetInfo)).commit();
-        debug_sharedpreferences.edit().putInt("flag", 1);
-        debug_sharedpreferences.edit().putInt("id", appWidgetId);
-
-        Log.d("hello4", gson.toJson(appWidgetInfo) + "");
-
-        Toast.makeText(MainActivity.this, appWidgetId + "", Toast.LENGTH_SHORT).show();
-
-        Log.i(TAG, "The widget size is: " + appWidgetInfo.minWidth + "*" + appWidgetInfo.minHeight);
-        Log.d("createWidget", "ended");
+        handleAddNewAppWidget(appWidgetId, appWidgetInfo);
+//        AppWidgetHostView hostView = mAppWidgetHost.createView(this, appWidgetId, appWidgetInfo);
+//        hostView.setAppWidget(appWidgetId, appWidgetInfo);
+//        mainLayout.addView(hostView);
+//
+//        debug_sharedpreferences.edit().putString("info", gson.toJson(appWidgetInfo)).commit();
+//        //debug_sharedpreferences.edit().putInt("flag", 1).commit();
+//        debug_sharedpreferences.edit().putInt("id", appWidgetId).commit();
+//        Log.d("hello6", "id:" + appWidgetId);
+//
+//        Log.d("hello4", gson.toJson(appWidgetInfo) + "");
+//
+//        Toast.makeText(MainActivity.this, appWidgetId + "", Toast.LENGTH_SHORT).show();
+//
+//        Log.i(TAG, "The widget size is: " + appWidgetInfo.minWidth + "*" + appWidgetInfo.minHeight);
+//        Log.d("createWidget", "ended");
     }
-
+    public void getPosition() {
+        Log.d("pika", "0");
+        Intent gridIntent = new Intent(this, Grid.class);
+        startActivityForResult(gridIntent, R.integer.REQUEST_PICK_GRID);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("onActivityResult", "Started");
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_PICK_APPWIDGET) {
-                Log.d("onActivityResult", "REQUEST_PICK_APPWIDGET");
+            if (requestCode == R.integer.REQUEST_PICK_APPWIDGET) {
+                getPosition();
+                Log.d("pika", "2");
                 configureWidget(data);
-            } else if (requestCode == REQUEST_CREATE_APPWIDGET) {
+            } else if (requestCode == R.integer.REQUEST_CREATE_APPWIDGET) {
                 Log.d("onActivityResult", "REQUEST_CREATE_APPWIDGET");
+                Log.d("pika", "3");
                 createWidget(data);
                 Log.d("onActivityResult", "REQUEST_CREATE_APPWIDGET END");
+            } else if (requestCode == R.integer.REQUEST_PICK_GRID) {
+                Log.d("pika", "1");
+                setPosition(data);
             }
         } else if (resultCode == RESULT_CANCELED && data != null) {
             Log.d("onActivityResult", "RESULT_CANCELED");
@@ -334,6 +423,7 @@ public class MainActivity extends Activity {
         }
     }
 
+    // pika
 //    private void populateUI() {
 //        ActionBar actionBar = getSupportActionBar();
 //        actionBar.setDisplayShowCustomEnabled(true);
@@ -407,7 +497,9 @@ public class MainActivity extends Activity {
         Log.i(TAG, "mainactivity on destroy");
     }
 
-    private int[] findPosition(int position) {
+    private void setPosition(Intent data) {
+        int position = data.getExtras().getInt("position");
+
         int[] pos = new int[2];
         int left;
         int top;
@@ -418,7 +510,12 @@ public class MainActivity extends Activity {
         pos[1] = top;
         //Toast.makeText(this, width + " " + height + " " + pos[0] +" " +  pos[1], Toast.LENGTH_SHORT).show();
 
-        return pos;
+        Log.d("pika", "left: " + left);
+        Log.d("pika", "top: " + top);
+
+        params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = left;
+        params.topMargin = top;
     }
 
     private void saveData() {

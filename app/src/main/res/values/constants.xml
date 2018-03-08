@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="REQUEST_PICK_APPWIDGET">1</integer>
+    <integer name="REQUEST_CREATE_APPWIDGET">2</integer>
+    <integer name="REQUEST_PICK_GRID">3</integer>
+</resources>
