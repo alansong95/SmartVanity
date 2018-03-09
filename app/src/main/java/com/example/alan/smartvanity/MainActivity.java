@@ -1,22 +1,29 @@
 package com.example.alan.smartvanity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -59,21 +66,18 @@ public class MainActivity extends Activity {
 
 
     int widgetCount;
-    ArrayList<String> providerList;
+
     ArrayList<String> savedInfoList;
 
+    ArrayList<String> providerList;
     ArrayList<Integer> posListL;
     ArrayList<Integer> posListT;
     ArrayList<Integer> appWidgetIdList;
     ArrayList<String> dataList;
 
-    Button button;
-
     private static final String TAG = "MyActivity";
 
     int appWidgetId;
-
-    Button syncButton;
 
     FirebaseDatabase database;
 
@@ -115,6 +119,8 @@ public class MainActivity extends Activity {
         infoList = mAppWidgetManager.getInstalledProviders();
 
         mainLayout = (ViewGroup) findViewById(R.id.main_layout);
+        mainLayout.setBackgroundColor(Color.BLACK);
+
     }
 
 
@@ -125,19 +131,50 @@ public class MainActivity extends Activity {
 
         initialize();
 
-        button = findViewById(R.id.add_button);
 
+        Button addButton = findViewById(R.id.add_button);
+        Button deleteButton = findViewById(R.id.delete_button);
+        registerForContextMenu(deleteButton);
         //selectIntent = new Intent(this, SelectWidget.class);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 selectWidget();
                 //startActivity(selectIntent);
             }
         });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppWidgetProviderInfo info;
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(MainActivity.this);
+                //builderSingle.setIcon(R.drawable.ic_launcher);
+                builderSingle.setTitle("Choose widget");
+
+                final ListAdapter listAdapter = new ListAdapter(MainActivity.this, appWidgetIdList);
+                builderSingle.setAdapter(listAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteWidget(listAdapter.getIndex(which));
+                    }
+                });
+                builderSingle.show();
+            }
+        });
+
+        Button syncButton = (Button) findViewById(R.id.sync_button);
+        syncButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                syncData();
+            }
+        });
+
         //populateUI();
         handleRestoreWidgets();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -245,10 +282,6 @@ public class MainActivity extends Activity {
             }
         } else if (resultCode == RESULT_CANCELED && data != null) {
             Log.d("onActivityResult", "RESULT_CANCELED");
-            int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-            if (appWidgetId != -1) {
-                mAppWidgetHost.deleteAppWidgetId(appWidgetId);
-            }
         }
     }
 
@@ -302,35 +335,16 @@ public class MainActivity extends Activity {
 
     // pika
     private void handleAddNewAppWidget(int newAppWidgetId, AppWidgetProviderInfo newInfo) {
-
-
         AppWidgetHostView hostView = mAppWidgetHost.createView(context.getApplicationContext(), newAppWidgetId, newInfo);
         hostView.setAppWidget(newAppWidgetId, newInfo);
 
         hostView.setId(newAppWidgetId);
-        hostView.setOnLongClickListener(new myListener(newAppWidgetId) {});
-
         mainLayout.addView(hostView, widgetCount, params);
 
-
         widgetCount++;
-        // create widgetHolder
 
         addDataToList(newAppWidgetId, newInfo);
         saveData();
-
-
-//        debug_sharedpreferences.edit().putInt("id", newAppWidgetId).commit();
-//        debug_sharedpreferences.edit().putString("data", serialized).commit();
-
-//        database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("users");
-//        myRef= myRef.child("debug").child("id");
-//        myRef.setValue(newAppWidgetId);
-//        myRef= myRef.getParent().child("info");
-//        myRef.setValue(serialized);
-
-        // storage is a wrapper for SharedPreferences, the key is the appWidgetId, and the value is the serialized content
     }
 
     public void addDataToList(int newAppWidgetId, AppWidgetProviderInfo newInfo) {
@@ -349,17 +363,10 @@ public class MainActivity extends Activity {
         Log.i(TAG, "WidgetCount: " + widgetCount);
 
         for (int i = 0; i < widgetCount; i++) {
-            //String key_selected = "selected" + i;
-            //String key_info = "info" + i;
             String key_data = "data" + i;
             String key_id = "id" + i;
             String key_positionL = "positionL" + i;
             String key_positionT = "positionT" + i;
-
-
-
-            //editor.putString(key_selected, providerList.get(i));
-            //editor.putString(key_info, savedInfoList.get(i));
 
             editor.putString(key_data, dataList.get(i));
             editor.putInt(key_id, appWidgetIdList.get(i));
@@ -369,9 +376,12 @@ public class MainActivity extends Activity {
         editor.commit();
     }
 
-    private void handleRestoreWidgets() {
-        loadData();
+    public void refresh() {
+        mainLayout.removeAllViews();
+        putWidget();
+    }
 
+    public void putWidget() {
         int appWidgetId;
         String data;
         WidgetHolder holder;
@@ -394,10 +404,14 @@ public class MainActivity extends Activity {
             params.topMargin = posListT.get(i);
 
             hostView.setId(appWidgetId);
-            hostView.setOnLongClickListener(new myListener(appWidgetId) {});
 
             mainLayout.addView(hostView, i, params);
         }
+    }
+
+    private void handleRestoreWidgets() {
+        loadData();
+        putWidget();
     }
 
     public void createWidget(Intent data) {
@@ -405,30 +419,43 @@ public class MainActivity extends Activity {
         Bundle extras = data.getExtras();
         newInfo = mAppWidgetManager.getAppWidgetInfo(newAppWidgetId);
         getPosition();
-        //handleAddNewAppWidget(appWidgetId, appWidgetInfo);
-//        AppWidgetHostView hostView = mAppWidgetHost.createView(this, appWidgetId, appWidgetInfo);
-//        hostView.setAppWidget(appWidgetId, appWidgetInfo);
-//        mainLayout.addView(hostView);
-//
-//        debug_sharedpreferences.edit().putString("info", gson.toJson(appWidgetInfo)).commit();
-//        //debug_sharedpreferences.edit().putInt("flag", 1).commit();
-//        debug_sharedpreferences.edit().putInt("id", appWidgetId).commit();
-//        Log.d("hello6", "id:" + appWidgetId);
-//
-//        Log.d("hello4", gson.toJson(appWidgetInfo) + "");
-//
-//        Toast.makeText(MainActivity.this, appWidgetId + "", Toast.LENGTH_SHORT).show();
-//
-//        Log.i(TAG, "The widget size is: " + appWidgetInfo.minWidth + "*" + appWidgetInfo.minHeight);
-//        Log.d("createWidget", "ended");
     }
+
     public void getPosition() {
         Log.d("pika", "0");
         Intent gridIntent = new Intent(this, Grid.class);
         startActivityForResult(gridIntent, R.integer.REQUEST_PICK_GRID);
     }
 
+    public void syncData() {
+        AppWidgetProviderInfo info;
+        database = FirebaseDatabase.getInstance();
+        uid = id_sharedpreferences.getString("uid", "");
 
+        DatabaseReference myRef = database.getReference("users");
+
+        myRef= myRef.child(uid).child("widgets");
+        myRef.setValue(null);
+
+        myRef= myRef.child("widget_count").child("val");
+        myRef.setValue(Integer.toString(widgetCount));
+
+        for (int i = 0; i < widgetCount; i++) {
+            info = AppWidgetManager.getInstance(context.getApplicationContext()).getAppWidgetInfo(appWidgetIdList.get(i));
+
+            myRef = myRef.getParent().getParent().child("positionL").child("val" + i);
+            myRef.setValue(posListL.get(i));
+
+            myRef = myRef.getParent().getParent().child("positionT").child("val" + i);
+            myRef.setValue(posListT.get(i));
+
+            myRef = myRef.getParent().getParent().child("provider").child("val" + i);
+            myRef.setValue(info.provider.toString());
+
+            myRef = myRef.getParent().getParent().child("id").child("val" + i);
+            myRef.setValue(appWidgetIdList.get(i));
+        }
+    }
 
     // pika
 //    private void populateUI() {
@@ -558,7 +585,7 @@ public class MainActivity extends Activity {
 //            Log.d("rightnow3", ""+ savedInfoList.get(j));
 //
 ////            AppWidgetHostView hostView = new AppWidgetHostView(context);
-////            hostView = mAppWidgetHost.createView(this, appWidgetIdList.get(j), appWidgetInfo);
+////            hostView = mAppWidgetHost.eView(this, appWidgetIdList.get(j), appWidgetInfo);
 ////            hostView.setAppWidget(appWidgetIdList.get(j), appWidgetInfo);
 //
 //            AppWidgetHostView hostView = new AppWidgetHostView(context);
@@ -582,35 +609,20 @@ public class MainActivity extends Activity {
 
     }
 
-    class myListener implements View.OnLongClickListener {
-        int appWidgetId;
+    public void deleteWidget(int index) {
+        Log.d("rightnow2", "matched");
+        mainLayout.getChildAt(index).setVisibility(View.GONE);
 
-        public myListener(int appWidgetId) {
-            this.appWidgetId = appWidgetId;
-        }
+        posListL.remove(index);
+        posListT.remove(index);
+        appWidgetIdList.remove(index);
+        dataList.remove(index);
+        widgetCount--;
 
-        //delete widget
-        @Override
-        public boolean onLongClick(View view) {
-            for (int i = 0; i < widgetCount; i++) {
-                if (appWidgetId == appWidgetIdList.get(i)) {
-                    Log.d("rightnow2", "matched");
-                    view.setVisibility(View.GONE);
 
-                    posListL.remove(i);
-                    posListT.remove(i);
-                    appWidgetIdList.remove(i);
-                    dataList.remove(i);
-                    widgetCount--;
-
-                    break;
-                }
-            }
-            Toast.makeText(MainActivity.this, "hello", Toast.LENGTH_SHORT).show();
-            saveData();
-            handleRestoreWidgets();
-            return false;
-        }
+        Toast.makeText(MainActivity.this, "hello", Toast.LENGTH_SHORT).show();
+        saveData();
+        refresh();
     }
 
     public void printChildViews() {

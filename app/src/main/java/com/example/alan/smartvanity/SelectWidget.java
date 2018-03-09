@@ -36,7 +36,7 @@ public class SelectWidget extends AppCompatActivity {
         manager = AppWidgetManager.getInstance(SelectWidget.this);
         infoList = manager.getInstalledProviders();
 
-        listAdapter = new ListAdapter(SelectWidget.this);
+        //listAdapter = new ListAdapter(SelectWidget.this);
 
         listView.setAdapter(listAdapter);
 

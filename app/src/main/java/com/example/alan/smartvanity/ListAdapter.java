@@ -13,19 +13,17 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class ListAdapter extends BaseAdapter {
-
     Context context;
-    AppWidgetManager manager;
-    List<AppWidgetProviderInfo> infoList;
 
-    Drawable[] images;
     Drawable[] icons;
-
     String[] values;
+
+    ArrayList<Integer> appWidgetIdList;
     /*
     public ListAdapter(Context context, String [] values, String [] numbers, int [] images){
         //super(context, R.layout.single_list_app_item, utilsArrayList);
@@ -36,30 +34,32 @@ public class ListAdapter extends BaseAdapter {
     }
     */
 
-    public ListAdapter(Context context) {
+    public ListAdapter(Context context, ArrayList<Integer> appWidgetIdList) {
+        this.appWidgetIdList = appWidgetIdList;
         this.context = context;
 
-        manager = AppWidgetManager.getInstance(context);
-        infoList = manager.getInstalledProviders();
-
-        images = new Drawable[getCount()];
         values = new String[getCount()];
         icons = new Drawable[getCount()];
 
-
-        for (int i = 0; i < infoList.size(); i++) {
-            images[i] = infoList.get(i).loadPreviewImage(context, 160);
-            if (images[i] == null) {
-                images[i] = infoList.get(i).loadIcon(context, 160);
-            }
-            icons[i] = infoList.get(i).loadIcon(context, 160);
-            values[i] = infoList.get(i).label;
+        AppWidgetProviderInfo info;
+        for (int i = 0; i < appWidgetIdList.size(); i++) {
+            info = AppWidgetManager.getInstance(context.getApplicationContext()).getAppWidgetInfo(appWidgetIdList.get(i));
+            icons[i] = info.loadIcon(context, 160);
+            values[i] = info.label;
         }
     }
 
     @Override
     public int getCount() {
-        return infoList.size();
+        return appWidgetIdList.size();
+    }
+
+    public int getAppWidgetId(int i) {
+        return appWidgetIdList.get(i);
+    }
+
+    public int getIndex(int i) {
+        return i;
     }
 
     @Override
@@ -80,12 +80,10 @@ public class ListAdapter extends BaseAdapter {
         final View result;
 
         if (convertView == null) {
-
             viewHolder = new ViewHolder();
-            LayoutInflater inflater = LayoutInflater.from(context);
+            LayoutInflater inflater = LayoutInflater.from(this.context);
             convertView = inflater.inflate(R.layout.single_list_item, parent, false);
             viewHolder.txtName = (TextView) convertView.findViewById(R.id.aNametxt);
-            viewHolder.img = (ImageView) convertView.findViewById(R.id.appIconIV);
             viewHolder.icon = (ImageView) convertView.findViewById(R.id.iconIV);
 
             result=convertView;
@@ -97,7 +95,6 @@ public class ListAdapter extends BaseAdapter {
         }
 
         viewHolder.txtName.setText(values[position]);
-        viewHolder.img.setImageDrawable(images[position]);
         viewHolder.icon.setImageDrawable(icons[position]);
 
         return convertView;
@@ -105,7 +102,6 @@ public class ListAdapter extends BaseAdapter {
 
     private static class ViewHolder {
         TextView txtName;
-        ImageView img;
         ImageView icon;
     }
 
