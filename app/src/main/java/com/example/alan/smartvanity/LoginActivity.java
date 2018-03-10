@@ -39,7 +39,6 @@ public class LoginActivity extends AppCompatActivity {
     private boolean mBackgroundBlurred = false;
     Context context;
 
-
     ImageView mBackgroundImageView;
     EditText mEmailEditText;
     EditText mPasswordEditText;
@@ -47,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
     TextView mSignUp;
     TextView mSignInTitle;
     Button mSignInButton;
-
 
     String uid;
 
@@ -63,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
             int a = savedInstanceState.getInt(KEY_SOME_INTEGER);
         }
 
+
         findViews();
         setupListeners();
         populateUI();
@@ -77,7 +76,6 @@ public class LoginActivity extends AppCompatActivity {
             System.out.println("No user is currently signed in.");
             // No user is signed in.
         } else {
-
             uid = currentUser.getUid();
             SharedPreferences id_sharedpreferences = getSharedPreferences("id", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = id_sharedpreferences.edit();
@@ -245,14 +243,15 @@ public class LoginActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Log.d(TAG, "signInWithEmail:success");
                     FirebaseUser user = mAuth.getCurrentUser();
-                    gotoHomeActivity();
 
+
+                    uid = mAuth.getCurrentUser().getUid();
                     SharedPreferences id_sharedpreferences = getSharedPreferences("id", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = id_sharedpreferences.edit();
                     editor.putString("uid", uid);
                     editor.commit();
 
-                    uid = user.getUid();
+                    gotoHomeActivity();
                 } else {
                     Log.w(TAG, "signInWithEmail:failure", task.getException());
                     Toast.makeText(LoginActivity.this, "Authentication failed.",
