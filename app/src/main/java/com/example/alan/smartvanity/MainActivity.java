@@ -297,7 +297,12 @@ public class MainActivity extends AppCompatActivity {
         Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
         pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         addEmptyData(pickIntent);
+
+        //TODO: these two lines are causing a runtime error.
+        Log.d(TAG, "\n\n\n\n\n\n\nR.integer.REQUEST_PICK_APPWIDGET: " + ((Integer) R.integer.REQUEST_PICK_APPWIDGET).toString() + "\n\n\n\n\n");
         startActivityForResult(pickIntent, R.integer.REQUEST_PICK_APPWIDGET);
+        //startActivityForResult(pickIntent, 1);
+
         Log.d("selectWidget", "Ended");
     }
 

@@ -11,15 +11,15 @@
         android:layout_height="match_parent"
         android:id="@+id/main_layout">
 
-        <android.support.v7.widget.ActionBarContainer
-            android:id="@+id/my_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="4dp"
-            android:textAlignment="center"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        <!--<android.support.v7.widget.ActionBarContainer-->
+            <!--android:id="@+id/my_toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--android:background="?attr/colorPrimary"-->
+            <!--android:elevation="4dp"-->
+            <!--android:textAlignment="center"-->
+            <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
+            <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
 
         <ImageView
             android:id="@+id/activity_login_background_image_view"
@@ -42,7 +42,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="16dp"
-            android:layout_marginEnd="140dp"
+            android:layout_marginEnd="50dp"
             android:layout_marginStart="50dp"
             android:background="@drawable/plus_button"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -55,24 +55,20 @@
             android:layout_height="64dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="23dp"
-            android:layout_marginEnd="140dp"
-            android:layout_marginStart="250dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
             android:background="@drawable/sync_button"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"  />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/delete_button"
-            android:text="delete"
-            android:layout_marginBottom="23dp"
-            android:layout_marginEnd="140dp"
-            android:layout_marginStart="420dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/delete_button"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>
 

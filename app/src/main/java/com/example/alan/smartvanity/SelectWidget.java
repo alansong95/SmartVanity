@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProviderInfo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -28,6 +29,7 @@ public class SelectWidget extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("Select Widget", "Created");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_widget);
 
@@ -47,6 +49,7 @@ public class SelectWidget extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("Select Widget", "This happened");
                 int appWidgetId = mAppWidgetHost.allocateAppWidgetId();
                 gridIntent.putExtra("WidgetId", appWidgetId);
                 Toast.makeText(SelectWidget.this, appWidgetId + "" , Toast.LENGTH_SHORT).show();
