@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         Button addButton = findViewById(R.id.add_button);
         Button deleteButton = findViewById(R.id.delete_button);
         registerForContextMenu(deleteButton);
-        //selectIntent = new Intent(this, SelectWidget  .class);
+        //selectIntent = new Intent(this, SelectWidget.class);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -455,16 +455,12 @@ public class MainActivity extends AppCompatActivity {
             myRef = myRef.getParent().getParent().child("positionT").child("val" + i);
             myRef.setValue(posListT.get(i));
 
-            String providerString = gson.toJson(info.provider);
             myRef = myRef.getParent().getParent().child("provider").child("val" + i);
-            myRef.setValue(providerString);
-
+            myRef.setValue(info.provider.toString());
 
             myRef = myRef.getParent().getParent().child("id").child("val" + i);
             myRef.setValue(appWidgetIdList.get(i));
         }
-        myRef = myRef.getParent().getParent().child("updated").child("val");
-        myRef.setValue(true);
     }
 
     // pika
@@ -575,6 +571,7 @@ public class MainActivity extends AppCompatActivity {
                 appWidgetIdList.add(sharedpreferences.getInt("id" + i, -1));
                 posListL.add(sharedpreferences.getInt("positionL" + i, -1));
                 posListT.add(sharedpreferences.getInt("positionT" + i, -1));
+
                 //savedInfoList.add(sharedpreferences.getString("info" + i, null));
             }
         }
