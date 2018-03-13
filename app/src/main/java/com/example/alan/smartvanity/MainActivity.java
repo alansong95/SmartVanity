@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         infoList = mAppWidgetManager.getInstalledProviders();
 
         mainLayout = (ViewGroup) findViewById(R.id.main_layout);
-        mainLayout.setBackgroundColor(Color.BLACK);
+        //mainLayout.setBackgroundColor(Color.BLACK);
 
     }
 
@@ -273,16 +273,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("onActivityResult", "Started");
         if (resultCode == RESULT_OK) {
-            if (requestCode == R.integer.REQUEST_PICK_APPWIDGET) {
+            if (requestCode == Constants.REQUEST_PICK_APPWIDGET) {
                 //getPosition();
                 Log.d("pika", "2");
                 configureWidget(data);
-            } else if (requestCode == R.integer.REQUEST_CREATE_APPWIDGET) {
+            } else if (requestCode == Constants.REQUEST_CREATE_APPWIDGET) {
                 Log.d("onActivityResult", "REQUEST_CREATE_APPWIDGET");
                 Log.d("pika", "3");
                 createWidget(data);
                 Log.d("onActivityResult", "REQUEST_CREATE_APPWIDGET END");
-            } else if (requestCode == R.integer.REQUEST_PICK_GRID) {
+            } else if (requestCode == Constants.REQUEST_PICK_GRID) {
                 Log.d("pika", "1");
                 setPosition(data);
             }
@@ -299,8 +299,8 @@ public class MainActivity extends AppCompatActivity {
         addEmptyData(pickIntent);
 
         //TODO: these two lines are causing a runtime error.
-        Log.d(TAG, "\n\n\n\n\n\n\nR.integer.REQUEST_PICK_APPWIDGET: " + ((Integer) R.integer.REQUEST_PICK_APPWIDGET).toString() + "\n\n\n\n\n");
-        startActivityForResult(pickIntent, R.integer.REQUEST_PICK_APPWIDGET);
+        //Log.d(TAG, "\n\n\n\n\n\n\nR.integer.REQUEST_PICK_APPWIDGET: " + ((Integer) Constants.REQUEST_PICK_APPWIDGET).toString() + "\n\n\n\n\n");
+        startActivityForResult(pickIntent, Constants.REQUEST_PICK_APPWIDGET);
         //startActivityForResult(pickIntent, 1);
 
         Log.d("selectWidget", "Ended");
@@ -326,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE);
             intent.setComponent(newInfo.configure);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, newAppWidgetId);
-            startActivityForResult(intent, R.integer.REQUEST_CREATE_APPWIDGET);
+            startActivityForResult(intent, Constants.REQUEST_CREATE_APPWIDGET);
             Log.d("configureWidget", "null ended");
         } else {
             Log.d("configureWidget", "else started");
@@ -435,7 +435,7 @@ public class MainActivity extends AppCompatActivity {
     public void getPosition() {
         Log.d("pika", "0");
         Intent gridIntent = new Intent(this, Grid.class);
-        startActivityForResult(gridIntent, R.integer.REQUEST_PICK_GRID);
+        startActivityForResult(gridIntent, Constants.REQUEST_PICK_GRID);
     }
 
     public void syncData() {
