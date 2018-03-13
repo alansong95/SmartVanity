@@ -12,7 +12,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -40,7 +42,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
     Intent selectIntent;
     Intent myIntent;
 
@@ -91,6 +93,9 @@ public class MainActivity extends Activity {
 
     AppWidgetProviderInfo newInfo;
     int newAppWidgetId;
+
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
 
     public void initialize() {
         gson = new Gson();
@@ -170,8 +175,9 @@ public class MainActivity extends Activity {
                 syncData();
             }
         });
+        findLayouts();
+        populateUI();
 
-        //populateUI();
         handleRestoreWidgets();
     }
 
@@ -462,11 +468,8 @@ public class MainActivity extends Activity {
     }
 
     // pika
-//    private void populateUI() {
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setDisplayShowCustomEnabled(true);
-//        actionBar.setTitle("Your Mirror");
-//        actionBar.setDisplayShowTitleEnabled(true);
+    private void populateUI() {
+        getSupportActionBar().setTitle("Your Mirror");
 //        syncButton = (Button) findViewById(R.id.sync_button);
 //
 //        database = FirebaseDatabase.getInstance();
@@ -502,7 +505,16 @@ public class MainActivity extends Activity {
 //
 //            }
 //        });
-//    }
+    }
+
+    private void findLayouts() {
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -651,5 +663,14 @@ public class MainActivity extends Activity {
 
         return stringBuilder.toString();
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
