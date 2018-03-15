@@ -78,12 +78,6 @@ public class LoginActivity extends AppCompatActivity {
             // No user is signed in.
         } else {
 
-            uid = currentUser.getUid();
-            SharedPreferences id_sharedpreferences = getSharedPreferences("id", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = id_sharedpreferences.edit();
-            editor.putString("uid", uid);
-            editor.commit();
-
             gotoHomeActivity();
             // Go to home page.
         }
@@ -246,13 +240,6 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "signInWithEmail:success");
                     FirebaseUser user = mAuth.getCurrentUser();
                     gotoHomeActivity();
-
-                    SharedPreferences id_sharedpreferences = getSharedPreferences("id", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = id_sharedpreferences.edit();
-                    editor.putString("uid", uid);
-                    editor.commit();
-
-                    uid = user.getUid();
                 } else {
                     Log.w(TAG, "signInWithEmail:failure", task.getException());
                     Toast.makeText(LoginActivity.this, "Authentication failed.",
@@ -263,6 +250,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void gotoHomeActivity() {
+        uid = mAuth.getCurrentUser().getUid();
+        SharedPreferences id_sharedpreferences = getSharedPreferences("id", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = id_sharedpreferences.edit();
+        editor.putString("uid", uid);
+        editor.commit();
+
         Intent homeActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
         Bundle stuff = new Bundle();
         startActivity(homeActivityIntent);

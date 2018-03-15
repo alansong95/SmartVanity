@@ -460,12 +460,15 @@ public class MainActivity extends AppCompatActivity {
             myRef = myRef.getParent().getParent().child("positionT").child("val" + i);
             myRef.setValue(posListT.get(i));
 
+
             myRef = myRef.getParent().getParent().child("provider").child("val" + i);
-            myRef.setValue(info.provider.toString());
+            myRef.setValue(gson.toJson(info.provider));
 
             myRef = myRef.getParent().getParent().child("id").child("val" + i);
             myRef.setValue(appWidgetIdList.get(i));
         }
+        myRef = myRef.getParent().getParent().child("updated");
+        myRef.setValue(true);
     }
 
     // pika
