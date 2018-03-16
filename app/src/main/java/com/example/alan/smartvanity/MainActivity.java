@@ -10,6 +10,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     int newAppWidgetId;
 
     private ActionBarDrawerToggle mToggle;
+
+    private DrawerLayout mDrawerLayout;
 
     public void initialize() {
         gson = new Gson();
@@ -125,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 syncData();
             }
         });
+
         findLayouts();
         populateUI();
 
@@ -298,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void findLayouts() {
-        DrawerLayout mDrawerLayout = findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
