@@ -33,25 +33,7 @@
         </activity>
 
         <activity
-            android:name=".deleteWidget"
-            android:parentActivityName=".MainActivity">
-
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.alan.smartvanity.MainActivity" />
-        </activity>
-        <activity
             android:name=".Grid"
-            android:parentActivityName=".SelectWidget">
-
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.alan.smartvanity.MainActivity" />
-        </activity>
-        <activity
-            android:name=".SelectWidget"
             android:parentActivityName=".MainActivity">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->

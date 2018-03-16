@@ -9,7 +9,4 @@ public class Constants {
     public static final short REQUEST_PICK_APPWIDGET = 1;
     public static final short REQUEST_CREATE_APPWIDGET = 2;
     public static final short REQUEST_PICK_GRID = 3;
-    public static final short REQUEST_PICK_DELETE = 4;
-
-
 }

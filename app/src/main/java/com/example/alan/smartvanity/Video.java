@@ -22,7 +22,7 @@ public class Video extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.video);
+        //setContentView(R.layout.video);
 
         SharedPreferences sharedpreferences = getSharedPreferences("id", Context.MODE_PRIVATE);
         String uid = sharedpreferences.getString("uid", "");
