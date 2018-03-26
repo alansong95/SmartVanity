@@ -10,55 +10,128 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp">
 
             <Button
-                android:id="@+id/button_up"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/button_dup"
+                android:layout_below="@+id/button_tup"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
-                android:text="UP" />
+                android:text="@string/dlt"
+                android:rotation="90" />
+
+            <Button
+                android:id="@+id/button_tup"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:text="@string/tlt"
+                android:rotation="90" />
+
+            <Button
+                android:id="@+id/button_up"
+                android:layout_below="@+id/button_dup"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:text="@string/lt"
+                android:rotation="90"/>
+
+            <Button
+                android:id="@+id/button_tleft"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+
+                android:layout_toLeftOf="@id/button_dleft"
+                android:layout_alignBottom="@+id/button_click"
+                android:text="@string/tlt" />
+
+            <Button
+                android:id="@+id/button_dleft"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/button_left"
+                android:layout_alignBottom="@+id/button_click"
+                android:text="@string/dlt" />
 
             <Button
                 android:id="@+id/button_left"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/button_click"
-                android:layout_alignBottom="@+id/button_click"
-                android:layout_toStartOf="@+id/button_down"
-                android:text="left" />
+                android:layout_toLeftOf="@id/button_click"
+                android:layout_alignBottom="@id/button_click"
+                android:text="@string/lt" />
 
             <Button
                 android:id="@+id/button_down"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="down"
+                android:layout_below="@+id/button_click"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/button_click"/>
+                android:text="@string/lt"
+                android:rotation="-90" />
+
+            <Button
+                android:id="@+id/button_ddown"
+                android:layout_below="@+id/button_down"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:text="@string/dlt"
+                android:rotation="-90" />
+
+            <Button
+                android:id="@+id/button_tdown"
+                android:layout_below="@+id/button_ddown"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:text="@string/tlt"
+                android:rotation="-90" />
 
             <Button
                 android:id="@+id/button_click"
-                android:layout_width="wrap_content"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:text="click"
+                android:layout_below="@+id/button_up"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/button_up"/>
+                android:text="x" />
 
             <Button
                 android:id="@+id/button_right"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/button_click"
-                android:layout_alignBottom="@+id/button_click"
-                android:layout_toEndOf="@+id/button_down"
-                android:text="right" />
+
+                android:layout_toRightOf="@id/button_click"
+                android:layout_alignBottom="@id/button_click"
+                android:text="@string/gt" />
+
+            <Button
+                android:id="@+id/button_dright"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+
+                android:layout_toRightOf="@id/button_right"
+                android:layout_alignBottom="@id/button_click"
+                android:text="@string/dgt" />
+
+            <Button
+                android:id="@+id/button_tright"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+
+                android:layout_toRightOf="@id/button_dright"
+                android:layout_alignBottom="@id/button_click"
+                android:text="@string/tgt" />
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="50dp"
             android:layout_marginLeft="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

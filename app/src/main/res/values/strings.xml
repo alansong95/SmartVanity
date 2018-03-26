@@ -23,6 +23,13 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="gt">\u003e</string>
+    <string name="dgt">\u003e\u003e</string>
+    <string name="tgt">\u003e\u003e\u003e</string>
+    <string name="lt">\u003c</string>
+    <string name="dlt">\u003c\u003c</string>
+    <string name="tlt">\u003c\u003c\u003c</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -30,6 +30,7 @@ public class controllerFragment extends Fragment {
     FirebaseDatabase database;
     DatabaseReference myRef;
 
+    int count;
 
     @Nullable
     @Override
@@ -47,60 +48,136 @@ public class controllerFragment extends Fragment {
 
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("users");
-        myRef = myRef.child(uid).child("controller");
-
+        myRef = myRef.child(uid).child("control").child("controller");
 
         Button leftButton = getView().findViewById(R.id.button_left);
+        Button dleftButton = getView().findViewById(R.id.button_dleft);
+        Button tleftButton = getView().findViewById(R.id.button_tleft);
         Button rightButton = getView().findViewById(R.id.button_right);
+        Button drightButton = getView().findViewById(R.id.button_dright);
+        Button trightButton = getView().findViewById(R.id.button_tright);
         Button upButton = getView().findViewById(R.id.button_up);
+        Button dupButton = getView().findViewById(R.id.button_dup);
+        Button tupButton = getView().findViewById(R.id.button_tup);
         Button downButton = getView().findViewById(R.id.button_down);
+        Button ddownButton = getView().findViewById(R.id.button_ddown);
+        Button tdownButton = getView().findViewById(R.id.button_tdown);
         Button clickButton = getView().findViewById(R.id.button_click);
         Button sendButton = getView().findViewById(R.id.button_send);
         final EditText editText = getView().findViewById(R.id.edit_text);
 
+        count = 0;
+
         leftButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myRef.setValue("left");
+                myRef.setValue("left" + count);
                 Log.d(TAG, "left");
+                count++;
+            }
+        });
+        dleftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myRef.setValue("dleft" + count);
+                Log.d(TAG, "dleft");
+                count++;
+            }
+        });
+        tleftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myRef.setValue("tleft" + count);
+                Log.d(TAG, "tleft");
+                count++;
             }
         });
 
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myRef.setValue("right");
+                myRef.setValue("right" + count);
+                count++;
+            }
+        });
+        drightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myRef.setValue("dright" + count);
+                count++;
+            }
+        });
+        trightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myRef.setValue("tright" + count);
+                count++;
             }
         });
 
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myRef.setValue("up");
+                myRef.setValue("up" + count);
+                count++;
+            }
+        });
+        dupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myRef.setValue("dup" + count);
+                count++;
+            }
+        });
+        tupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myRef.setValue("tup" + count);
+                count++;
             }
         });
 
         downButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myRef.setValue("down");
+                myRef.setValue("down" + count);
+                count++;
+            }
+        });
+        ddownButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myRef.setValue("ddown" + count);
+                count++;
+            }
+        });
+        tdownButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myRef.setValue("tdown" + count);
+                count++;
             }
         });
 
         clickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myRef.setValue("click");
+                myRef.setValue("click" + count);
+                count++;
             }
         });
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myRef.setValue("send");
+
+
                 myRef = myRef.getParent().child("StringInput");
                 myRef.setValue(editText.getText().toString());
+
                 myRef = myRef.getParent().child("controller");
+                myRef.setValue("send" + count);
+                count++;
             }
         });
     }
