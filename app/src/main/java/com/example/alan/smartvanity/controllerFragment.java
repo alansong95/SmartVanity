@@ -170,10 +170,10 @@ public class controllerFragment extends Fragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 myRef = myRef.getParent().child("StringInput");
                 myRef.setValue(editText.getText().toString());
+
+                editText.setText("");
 
                 myRef = myRef.getParent().child("controller");
                 myRef.setValue("send" + count);
