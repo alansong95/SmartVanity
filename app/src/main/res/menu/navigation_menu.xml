@@ -6,6 +6,8 @@
     <group android:checkableBehavior="single">
         <item android:id="@+id/nav_home"
             android:title="MY MIRROR" />
+        <item android:id="@+id/nav_bluetooth"
+            android:title="Bluetooth" />
         <item android:id="@+id/nav_controller"
             android:title="controller"/>
         <item android:id="@+id/nav_account"
