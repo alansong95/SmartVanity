@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -85,7 +86,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void updateDrawerMenuProfile() {
         DatabaseReference mDatabase;
         NavigationView mNavView = findViewById(R.id.nav_view);
-        mEmailTextView = mNavView.findViewById(R.id.drawer_email_text_view);
+        View headerView = mNavView.getHeaderView(0);
+        mEmailTextView = headerView.findViewById(R.id.drawer_email_text_view);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String email = user.getEmail();
