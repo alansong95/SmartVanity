@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     FragmentManager fragmentManager = getFragmentManager();
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         fragmentManager.beginTransaction().replace(R.id.content_frame, new MainFragment()).commit();
         navigationView.setCheckedItem(R.id.nav_home);
+
+
     }
 
     @Override
@@ -61,11 +65,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_about_us) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new AboutUsFragment()).commit();
         } else if (id == R.id.nav_logout) {
-
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new LogoutFragment()).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 }

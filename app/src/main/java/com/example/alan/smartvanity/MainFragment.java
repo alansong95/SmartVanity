@@ -20,7 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
@@ -59,6 +62,9 @@ public class MainFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
 
     public void initialize() {
+
+
+
         gson = new Gson();
 
         id_sharedpreferences = this.getActivity().getSharedPreferences("id", Context.MODE_PRIVATE);
@@ -81,6 +87,7 @@ public class MainFragment extends Fragment {
         mAppWidgetManager = AppWidgetManager.getInstance(this.getActivity());
 
         mainLayout = getView().findViewById(R.id.main_layout);
+
     }
 
     @Override
@@ -93,10 +100,12 @@ public class MainFragment extends Fragment {
         super.onStart();
         //mAppWidgetHost.startListening();
 
+
         initialize();
 
         Button addButton = getView().findViewById(R.id.add_button);
         Button deleteButton = getView().findViewById(R.id.delete_button);
+
         registerForContextMenu(deleteButton);
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -132,7 +141,7 @@ public class MainFragment extends Fragment {
         });
 
         populateUI();
-
+        updateDrawerMenuProfile();
         handleRestoreWidgets();
     }
 
@@ -354,5 +363,22 @@ public class MainFragment extends Fragment {
         //Toast.makeText(MainFragment.this, "hello", Toast.LENGTH_SHORT).show();
         saveData();
         refresh();
+    }
+
+    private void updateDrawerMenuProfile() {
+        DatabaseReference mDatabase;
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // Name, email address, and profile photo Url
+//            String name = user.getDisplayName();
+//            String email = user.getEmail();
+//            mDrawerEmail.setText(email);
+//            mDrawerName.setText(name);
+
+            // Check if user's email is verified
+            boolean emailVerified = user.isEmailVerified();
+
+            String uid = user.getUid();
+        }
     }
 }
