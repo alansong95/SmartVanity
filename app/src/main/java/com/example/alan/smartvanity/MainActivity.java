@@ -8,11 +8,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     FragmentManager fragmentManager = getFragmentManager();
+    TextView mEmailTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager.beginTransaction().replace(R.id.content_frame, new MainFragment()).commit();
         navigationView.setCheckedItem(R.id.nav_home);
 
+        updateDrawerMenuProfile();
 
     }
 
@@ -72,5 +80,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+    private void updateDrawerMenuProfile() {
+        DatabaseReference mDatabase;
+        NavigationView mNavView = findViewById(R.id.nav_view);
+        mEmailTextView = mNavView.findViewById(R.id.drawer_email_text_view);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String email = user.getEmail();
+            Log.w(Constants.TAG, "Email: " + email);
+            mEmailTextView.setText(email);
+        }
     }
 }

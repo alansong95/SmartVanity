@@ -61,7 +61,6 @@ public class MainFragment extends Fragment {
 
     private DrawerLayout mDrawerLayout;
 
-    TextView mEmailTextView;
 
     public void initialize() {
 
@@ -89,7 +88,7 @@ public class MainFragment extends Fragment {
         mAppWidgetManager = AppWidgetManager.getInstance(this.getActivity());
 
         mainLayout = getView().findViewById(R.id.main_layout);
-        mEmailTextView = getView().findViewById(R.id.drawer_email_text_view);
+
 
     }
 
@@ -144,7 +143,7 @@ public class MainFragment extends Fragment {
         });
 
         populateUI();
-        updateDrawerMenuProfile();
+
         handleRestoreWidgets();
     }
 
@@ -368,12 +367,4 @@ public class MainFragment extends Fragment {
         refresh();
     }
 
-    private void updateDrawerMenuProfile() {
-        DatabaseReference mDatabase;
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            String email = user.getEmail();
-            mEmailTextView.setText(email);
-        }
-    }
 }
