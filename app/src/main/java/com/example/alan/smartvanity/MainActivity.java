@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentManager.beginTransaction().replace(R.id.content_frame, new MainFragment()).commit();
         } else if (id == R.id.nav_controller) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new controllerFragment()).commit();
-        } else if (id == R.id.nav_bluetooth) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new BluetoothFragment()).commit();
         } else if (id == R.id.nav_account) {
 
         } else if (id == R.id.nav_about_us) {
