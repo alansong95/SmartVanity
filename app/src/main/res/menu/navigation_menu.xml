@@ -5,11 +5,11 @@
 
     <group android:checkableBehavior="single">
         <item android:id="@+id/nav_home"
-            android:title="MY MIRROR" />
+            android:title="My Mirror" />
         <item android:id="@+id/nav_bluetooth"
             android:title="Bluetooth" />
         <item android:id="@+id/nav_controller"
-            android:title="controller"/>
+            android:title="Controller"/>
         <item android:id="@+id/nav_account"
             android:title="Account" />
         <item android:id="@+id/nav_about_us"
