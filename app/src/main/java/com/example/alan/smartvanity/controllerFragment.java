@@ -1,6 +1,7 @@
 package com.example.alan.smartvanity;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -56,6 +57,8 @@ public class controllerFragment extends Fragment {
 
 //    int count;
 
+    ProgressDialog mProgressDialog;
+
     BluetoothAdapter mBluetoothAdapter;
     Button mbtnDiscover;
 
@@ -83,6 +86,7 @@ public class controllerFragment extends Fragment {
     Button ddownButton;
     Button tdownButton;
     Button clickButton;
+    Button endButton;
 
     /**
      * Broadcast Receiver for listing devices that are not yet paired
@@ -106,9 +110,13 @@ public class controllerFragment extends Fragment {
                         mBTDevice = device;
                         mBluetoothConnection = new BluetoothConnectionService(getActivity());
 
+
+
                         startConnection();
 
                         enableButton(true);
+
+                        mProgressDialog.dismiss();
                     }
                 } catch (Exception e) {
 
@@ -132,6 +140,7 @@ public class controllerFragment extends Fragment {
         tdownButton.setEnabled(en);
         clickButton.setEnabled(en);
         btnSend.setEnabled(en);
+        endButton.setEnabled(en);
     }
 
     /**
@@ -229,6 +238,7 @@ public class controllerFragment extends Fragment {
         ddownButton = getView().findViewById(R.id.button_ddown);
         tdownButton = getView().findViewById(R.id.button_tdown);
         clickButton = getView().findViewById(R.id.button_click);
+        endButton = getView().findViewById(R.id.button_end);
 
         enableButton(false);
 //        count = 0;
@@ -342,6 +352,17 @@ public class controllerFragment extends Fragment {
             }
         });
 
+        endButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // triple right
+                byte[] bytes = "!14".getBytes(Charset.defaultCharset());
+                mBluetoothConnection.write(bytes);
+                mBluetoothConnection.stop();
+                enableButton(false);
+            }
+        });
+
 //        sendButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -390,6 +411,9 @@ public class controllerFragment extends Fragment {
 
     public void btnDiscover() {
         Log.d(TAG, "btnDiscover: Looking for unpaired devices.");
+
+        mProgressDialog = ProgressDialog.show(getContext(),"Connecting Bluetooth"
+                ,"Please Wait...",true);
 
         mBluetoothAdapter.enable();
 
@@ -456,5 +480,4 @@ public class controllerFragment extends Fragment {
             Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
         }
     }
-
 }

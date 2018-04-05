@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        fragmentManager.beginTransaction().replace(R.id.content_frame, new MainFragment()).commit();
+        fragmentManager.beginTransaction().add(R.id.content_frame, new MainFragment(), "home").commit();
         navigationView.setCheckedItem(R.id.nav_home);
     }
 
@@ -51,9 +52,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new MainFragment()).commit();
+            if (fragmentManager.findFragmentByTag("home") == null) {
+                fragmentManager.beginTransaction().add(R.id.content_frame, new MainFragment(), "home").commit();
+            } else {
+                fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("home")).commit();
+            }
+            if(fragmentManager.findFragmentByTag("controller") != null){
+                //if the other fragment is visible, hide it.
+                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("controller")).commit();
+            }
+
         } else if (id == R.id.nav_controller) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new controllerFragment()).commit();
+            if (fragmentManager.findFragmentByTag("controller") == null) {
+                fragmentManager.beginTransaction().add(R.id.content_frame, new controllerFragment(), "controller").commit();
+            } else {
+                fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("controller")).commit();
+            }
+            if(fragmentManager.findFragmentByTag("home") != null){
+                //if the other fragment is visible, hide it.
+                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("home")).commit();
+            }
+
         } else if (id == R.id.nav_account) {
 
         } else if (id == R.id.nav_about_us) {

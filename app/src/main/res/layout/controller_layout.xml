@@ -24,6 +24,13 @@
                 android:text="Connect" />
 
             <Button
+                android:layout_marginRight="15dp"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_end"
+                android:text="End" />
+            <Button
                 android:id="@+id/button_dup"
                 android:layout_below="@+id/button_tup"
                 android:layout_width="50dp"

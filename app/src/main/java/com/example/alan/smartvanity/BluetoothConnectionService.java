@@ -44,6 +44,10 @@ public class BluetoothConnectionService {
         start();
     }
 
+    BluetoothSocket mmSocket;
+    InputStream mmInStream;
+    OutputStream mmOutStream;
+
 
     /**
      * This thread runs while listening for incoming connections. It behaves
@@ -192,6 +196,55 @@ public class BluetoothConnectionService {
         }
     }
 
+    public synchronized void stop() {
+   /* if (mConnectedThread.mmSocket.isConnected()){
+        mConnectedThread.interrupt();
+        mConnectThread.cancel();
+
+    }*/
+
+        if (mConnectThread != null) {
+            mConnectThread.cancel();
+            mConnectThread = null;
+        }
+
+        if (mConnectedThread != null) {
+            mConnectedThread.interrupt();
+            mConnectedThread.cancel();
+            mConnectedThread = null;
+        }
+
+        if (mInsecureAcceptThread != null) {
+            mInsecureAcceptThread.cancel();
+            mInsecureAcceptThread = null;
+        }
+
+
+        try {
+            mmSocket.close();
+
+        } catch (Exception e) {
+
+        }
+        mmSocket = null;
+
+        try {
+            mmInStream.close();
+
+        } catch (Exception e) {
+
+        }
+        mmInStream = null;
+
+        try {
+            mmOutStream.close();
+
+        } catch (Exception e) {
+
+        }
+        mmOutStream = null;
+    }
+
     /**
 
      AcceptThread starts and sits waiting for a connection.
@@ -202,8 +255,8 @@ public class BluetoothConnectionService {
         Log.d(TAG, "startClient: Started.");
 
         //initprogress dialog
-        mProgressDialog = ProgressDialog.show(mContext,"Connecting Bluetooth"
-                ,"Please Wait...",true);
+//        mProgressDialog = ProgressDialog.show(mContext,"Connecting Bluetooth"
+//                ,"Please Wait...",true);
 
         mConnectThread = new ConnectThread(device, uuid);
         mConnectThread.start();
@@ -214,10 +267,6 @@ public class BluetoothConnectionService {
      receiving incoming data through input/output streams respectively.
      **/
     private class ConnectedThread extends Thread {
-        private final BluetoothSocket mmSocket;
-        private final InputStream mmInStream;
-        private final OutputStream mmOutStream;
-
         public ConnectedThread(BluetoothSocket socket) {
             Log.d(TAG, "ConnectedThread: Starting.");
 
@@ -226,11 +275,11 @@ public class BluetoothConnectionService {
             OutputStream tmpOut = null;
 
             //dismiss the progressdialog when connection is established
-            try{
-                mProgressDialog.dismiss();
-            }catch (NullPointerException e){
-                e.printStackTrace();
-            }
+//            try{
+//                mProgressDialog.dismiss();
+//            }catch (NullPointerException e){
+//                e.printStackTrace();
+//            }
 
 
             try {
