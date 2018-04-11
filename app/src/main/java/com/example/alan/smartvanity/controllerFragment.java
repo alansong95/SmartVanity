@@ -102,7 +102,7 @@ public class controllerFragment extends Fragment {
                 BluetoothDevice device = intent.getParcelableExtra (BluetoothDevice.EXTRA_DEVICE);
 
                 try {
-                    if (device.getName().equals("SmartVanity-Song2018")) {
+                    if (device.getName().equals("SmartVanity-Udoo2018")) {
                         mBluetoothAdapter.cancelDiscovery();
 
                         device.createBond();
