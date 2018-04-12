@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -34,12 +35,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import jp.wasabeef.blurry.Blurry;
 
 /**
  * Created by Alan on 3/24/2018.
@@ -87,6 +91,9 @@ public class controllerFragment extends Fragment {
     Button tdownButton;
     Button clickButton;
     Button endButton;
+
+    ImageView mBackgroundImageView;
+    Boolean mBackgroundBlurred = false;
 
     /**
      * Broadcast Receiver for listing devices that are not yet paired
@@ -182,12 +189,12 @@ public class controllerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //Broadcasts when bond state changes (ie:pairing)
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
         getActivity().registerReceiver(mBroadcastReceiver4, filter);
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
     }
 
     @Override
@@ -376,6 +383,13 @@ public class controllerFragment extends Fragment {
 //                count++;
 //            }
 //        });
+        mBackgroundImageView = (ImageView) getView().findViewById(R.id.activity_controller_background_image_view);
+
+        if (mBackgroundBlurred) {
+            Log.d(TAG, "Background is already blurred...");
+        } else {
+            blurBackground();
+        }
     }
 
     @Override
@@ -479,5 +493,24 @@ public class controllerFragment extends Fragment {
         }else{
             Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
         }
+    }
+
+    private void blurBackground() {
+        mBackgroundImageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (mBackgroundBlurred) {
+                    Log.d(TAG, "Background already blurred...");
+                } else {
+                    Log.d(TAG, "Blurring background...");
+                    Blurry.with(getActivity())
+                            .radius(44)
+                            .animate(500)
+                            .capture(mBackgroundImageView)
+                            .into(mBackgroundImageView);
+                    mBackgroundBlurred = true;
+                }
+            }
+        });
     }
 }
