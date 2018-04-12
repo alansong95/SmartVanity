@@ -31,5 +31,12 @@
     <string name="tlt">\u003c\u003c\u003c</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="about_us_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quis mattis velit. Integer eu ultricies est, ut rutrum enim. In lectus sem, feugiat nec massa vitae, vestibulum hendrerit neque. Fusce rhoncus sagittis mauris, in pellentesque libero vehicula nec. Duis vitae lectus varius, ultricies leo ut, ultrices augue. Cras nec tortor fringilla, molestie sapien vitae, pellentesque enim. In hac habitasse platea dictumst. Proin ultrices sapien purus, et venenatis risus sodales eget. Aenean nec nulla metus. Aliquam finibus enim ac felis sagittis porttitor. Nam vel diam venenatis, varius ipsum eu, imperdiet arcu. Fusce blandit nec nisl id bibendum. Etiam dapibus gravida ipsum vel bibendum. Morbi imperdiet nisl quis erat lacinia dapibus. Aenean ac lectus bibendum, dapibus erat vel, posuere sapien.\n\n
+
+Donec molestie elit vitae arcu molestie, quis bibendum orci aliquet. Ut eu luctus ante. Sed vel condimentum purus. Sed mollis, ante sed finibus aliquam, nunc ex ultricies nisi, eu volutpat felis erat a erat. Mauris sit amet hendrerit dolor, in tincidunt ipsum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Ut eleifend tellus vitae varius malesuada. Cras sollicitudin urna sit amet lectus interdum hendrerit. Fusce tristique, arcu non consectetur interdum, odio tortor viverra mi, non sagittis eros enim eu turpis. Donec sed neque justo. Nam dictum, risus in laoreet ultricies, quam purus interdum odio, vitae efficitur nisl mi ac felis. Maecenas vehicula nisi ipsum, at accumsan lacus mattis eu.\n\n
+
+In rutrum sagittis neque finibus imperdiet. Curabitur imperdiet dignissim arcu, scelerisque ornare mi feugiat sit amet. Nulla facilisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam nec augue congue, accumsan arcu vitae, consequat dolor. Maecenas condimentum ipsum quis elementum scelerisque. Aenean ac dolor non arcu interdum ornare. Cras vel felis vel urna bibendum vestibulum a a tortor. Duis fringilla placerat dolor. Maecenas luctus turpis purus, vel laoreet sapien pellentesque et.
+
+</string>
+
 </resources>
