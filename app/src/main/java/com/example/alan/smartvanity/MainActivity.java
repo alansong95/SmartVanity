@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_about_us) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new AboutUsFragment()).commit();
         } else if (id == R.id.nav_logout) {
-
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new LogoutFragment()).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

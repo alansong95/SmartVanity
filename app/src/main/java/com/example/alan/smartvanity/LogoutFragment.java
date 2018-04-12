@@ -1,14 +1,18 @@
 package com.example.alan.smartvanity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class AboutUsFragment extends Fragment {
+import com.google.firebase.auth.FirebaseAuth;
 
-    public AboutUsFragment() {
+
+public class LogoutFragment extends Fragment {
+
+    public LogoutFragment() {
         // Required empty public constructor
     }
 
@@ -17,6 +21,9 @@ public class AboutUsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        FirebaseAuth.getInstance().signOut();
+        startActivity(intent);
 
     }
 
@@ -24,7 +31,7 @@ public class AboutUsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_about_us, container, false);
+        return inflater.inflate(R.layout.fragment_logout, container, false);
     }
 
 
@@ -32,5 +39,4 @@ public class AboutUsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
-
 }
