@@ -10,9 +10,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     FragmentManager fragmentManager = getFragmentManager();
+    TextView mEmailTextView;
+    TextView mDisplayNameTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         fragmentManager.beginTransaction().add(R.id.content_frame, new MainFragment(), "home").commit();
         navigationView.setCheckedItem(R.id.nav_home);
+
+        updateDrawerMenuProfile();
     }
 
     @Override
@@ -84,5 +96,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void updateDrawerMenuProfile() {
+
+        NavigationView mNavView = findViewById(R.id.nav_view);
+        View headerView = mNavView.getHeaderView(0);
+        mEmailTextView = headerView.findViewById(R.id.drawer_email_text_view);
+        mDisplayNameTextView = headerView.findViewById(R.id.drawer_display_text_view);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String email = user.getEmail();
+            Log.w(Constants.TAG, "Email: " + email);
+            mEmailTextView.setText(email);
+            if (user.getDisplayName() != null) {
+                String displayName = user.getDisplayName();
+                Log.w(Constants.TAG, "Display Name: " + displayName);
+                mDisplayNameTextView.setText(displayName);
+            } else {
+                mDisplayNameTextView.setText("No Display Name");
+            }
+        }
     }
 }

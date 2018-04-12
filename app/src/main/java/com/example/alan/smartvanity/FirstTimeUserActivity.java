@@ -112,6 +112,19 @@ public class FirstTimeUserActivity extends AppCompatActivity {
         mDatabase.child("users").child(uid).child("email").setValue(email);
         mDatabase.child("users").child(uid).child("first-name").setValue(firstName);
         mDatabase.child("users").child(uid).child("last-name").setValue(lastName);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            final String newDisplayName = firstName + " " + lastName;
+            UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(newDisplayName).build();
+            user.updateProfile(profileChangeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Log.d(Constants.TAG, "Updated users display name to " + newDisplayName);
+                    }
+                }
+            });
+        }
     }
 
     private void gotoHomeActivity() {
