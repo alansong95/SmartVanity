@@ -213,7 +213,9 @@ public class controllerFragment extends Fragment {
                 myRef = myRef.getParent().child("sound");
                 myRef.setValue(seekBar.getProgress());
 
-
+                myRef = myRef.getParent().child("controller");
+                myRef.setValue("@15" + count);
+                count++;
             }
 
             @Override
@@ -400,7 +402,6 @@ public class controllerFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
 
