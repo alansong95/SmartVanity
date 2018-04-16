@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#ef5a5a</color>
     <color name="colorPrimaryDark">#cc4e4e</color>
+    <color name="colorPrimaryDarker">#803030</color>
     <color name="colorAccent">#4A4A4A</color>
     <color name="controllerColor">#FFFFFF</color>
 </resources>
