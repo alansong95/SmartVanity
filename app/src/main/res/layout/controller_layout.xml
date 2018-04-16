@@ -230,35 +230,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <Button
-                android:id="@+id/btnFindUnpairedDevices"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="1dp"
-                android:layout_marginStart="0dp"
-                android:layout_weight="1"
-                android:background="@color/controllerColor"
-                android:fontFamily="@font/circularbold"
-                android:text="Connect"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textColor="@android:color/holo_blue_dark"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="432dp" />
 
-            <Button
-                android:id="@+id/button_end"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:background="@color/controllerColor"
-                android:fontFamily="@font/circularbold"
-                android:text="End"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp" />
         </LinearLayout>
 
         <SeekBar

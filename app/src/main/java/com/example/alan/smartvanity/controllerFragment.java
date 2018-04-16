@@ -37,6 +37,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SeekBar;
 
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
@@ -72,9 +73,6 @@ public class controllerFragment extends Fragment {
 
     EditText etSend;
 
-    private static final UUID MY_UUID_INSECURE =
-            UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
-
     BluetoothDevice mBTDevice;
 
     FirebaseDatabase database;
@@ -97,46 +95,11 @@ public class controllerFragment extends Fragment {
     Button clickButton;
     Button endButton;
 
+    SeekBar seekBar;
+
     ImageView mBackgroundImageView;
     Boolean mBackgroundBlurred = false;
 
-    /**
-     * Broadcast Receiver for listing devices that are not yet paired
-     * -Executed by btnDiscover() method.
-     */
-    private BroadcastReceiver mBroadcastReceiver3 = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            Log.d(TAG, "onReceive: ACTION FOUND.");
-
-            if (action.equals(BluetoothDevice.ACTION_FOUND)){
-                BluetoothDevice device = intent.getParcelableExtra (BluetoothDevice.EXTRA_DEVICE);
-
-                Log.d("DEBUG123", "name: " + device.getName());
-                Log.d("DEBUG123", "address: " + device.getAddress());
-
-                try {
-                    if (device.getAddress().equals("1C:4D:70:A3:30:62")) {
-                        mBluetoothAdapter.cancelDiscovery();
-
-                        device.createBond();
-
-                        mBTDevice = device;
-                        mBluetoothConnection = new BluetoothConnectionService(getActivity());
-
-                        startConnection();
-
-//                        enableButton(true);
-
-                        mProgressDialog.dismiss();
-                    }
-                } catch (Exception e) {
-                    Log.d("DEBUG123", "broadcast3 error");
-                }
-            }
-        }
-    };
 
     public void enableButton(boolean en) {
         leftButton.setEnabled(en);
@@ -211,15 +174,6 @@ public class controllerFragment extends Fragment {
 
         btnSend = (Button) getView().findViewById(R.id.button_send);
         etSend = (EditText) getView().findViewById(R.id.edit_text);
-        mbtnDiscover = (Button) getView().findViewById(R.id.btnFindUnpairedDevices);
-
-
-        mbtnDiscover.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btnDiscover();
-            }
-        });
 
 
         SharedPreferences id_sharedpreferences = this.getActivity().getSharedPreferences("id", Context.MODE_PRIVATE);
@@ -244,10 +198,34 @@ public class controllerFragment extends Fragment {
         ddownButton = getView().findViewById(R.id.button_ddown);
         tdownButton = getView().findViewById(R.id.button_tdown);
         clickButton = getView().findViewById(R.id.button_click);
-        endButton = getView().findViewById(R.id.button_end);
+
+        seekBar = getView().findViewById(R.id.seekBar);
+        seekBar.setMax(10);
 
 //        enableButton(false);
 //        count = 0;
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                Log.d("DEBUG345", seekBar.getProgress() + "");
+
+                myRef = myRef.getParent().child("sound");
+                myRef.setValue(seekBar.getProgress());
+
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         leftButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -423,104 +401,16 @@ public class controllerFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        try {
-            Log.d(TAG, "Bond State: " + mBTDevice.getBondState());
-        } catch (Exception e) {
-
-        }
-
-
-        if (mBTDevice != null && mBTDevice.getBondState() == BluetoothDevice.BOND_BONDED){
-//            enableButton(true);
-        }
     }
 
-    //create method for starting connection
-//***remember the conncction will fail and app will crash if you haven't paired first
-    public void startConnection(){
-        startBTConnection(mBTDevice,MY_UUID_INSECURE);
-    }
 
-    /**
-     * starting chat service method
-     */
-    public void startBTConnection(BluetoothDevice device, UUID uuid){
-        Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
-
-        mBluetoothConnection.startClient(device,uuid);
-    }
-
-    public void btnDiscover() {
-        Log.d(TAG, "btnDiscover: Looking for unpaired devices.");
-
-        mProgressDialog = ProgressDialog.show(getContext(),"Connecting Bluetooth"
-                ,"Please Wait...",true);
-
-//        mBluetoothAdapter.enable();
-
-        if(mBluetoothAdapter.isDiscovering()){
-            mBluetoothAdapter.cancelDiscovery();
-            Log.d(TAG, "btnDiscover: Canceling discovery.");
-
-            //check BT permissions in manifest
-            checkBTPermissions();
-
-            mBluetoothAdapter.startDiscovery();
-            IntentFilter discoverDevicesIntent = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-            getActivity().registerReceiver(mBroadcastReceiver3, discoverDevicesIntent);
-        }
-
-        if(!mBluetoothAdapter.isDiscovering()){
-
-            //check BT permissions in manifest
-            checkBTPermissions();
-
-            mBluetoothAdapter.startDiscovery();
-            IntentFilter discoverDevicesIntent = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-            getActivity().registerReceiver(mBroadcastReceiver3, discoverDevicesIntent);
-        }
-    }
 
     @Override
     public void onDestroy() {
         Log.d("DEBUG123", "onDestroy: called.");
         super.onDestroy();
-
-        try {
-            getActivity().unregisterReceiver(mBroadcastReceiver3);
-        } catch (IllegalArgumentException e) {
-
-        }
-
-        try {
-            getActivity().unregisterReceiver(mBroadcastReceiver4);
-        } catch (IllegalArgumentException e) {
-
-        }
-
-
     }
 
-
-    /**
-     * This method is required for all devices running API23+
-     * Android must programmatically check the permissions for bluetooth. Putting the proper permissions
-     * in the manifest is not enough.
-     *
-     * NOTE: This will only execute on versions > LOLLIPOP because it is not needed otherwise.
-     */
-    private void checkBTPermissions() {
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
-            int permissionCheck = getActivity().checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
-            permissionCheck += getActivity().checkSelfPermission("Manifest.permission.ACCESS_COARSE_LOCATION");
-            if (permissionCheck != 0) {
-
-                this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001); //Any number
-            }
-        }else{
-            Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
-        }
-    }
 
     private void blurBackground() {
         mBackgroundImageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
