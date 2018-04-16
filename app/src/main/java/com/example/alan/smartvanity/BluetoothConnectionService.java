@@ -224,7 +224,7 @@ public class BluetoothConnectionService {
             mmSocket.close();
 
         } catch (Exception e) {
-
+            Log.d("err", "error closing socket");
         }
         mmSocket = null;
 
@@ -232,7 +232,7 @@ public class BluetoothConnectionService {
             mmInStream.close();
 
         } catch (Exception e) {
-
+            Log.d("err", "error closing socket");
         }
         mmInStream = null;
 
@@ -240,7 +240,7 @@ public class BluetoothConnectionService {
             mmOutStream.close();
 
         } catch (Exception e) {
-
+            Log.d("err", "error closing socket");
         }
         mmOutStream = null;
     }

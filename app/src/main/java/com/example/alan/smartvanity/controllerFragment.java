@@ -77,6 +77,11 @@ public class controllerFragment extends Fragment {
 
     BluetoothDevice mBTDevice;
 
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+
+    int count;
+
     Button leftButton;
     Button dleftButton;
     Button tleftButton;
@@ -108,8 +113,11 @@ public class controllerFragment extends Fragment {
             if (action.equals(BluetoothDevice.ACTION_FOUND)){
                 BluetoothDevice device = intent.getParcelableExtra (BluetoothDevice.EXTRA_DEVICE);
 
+                Log.d("DEBUG123", "name: " + device.getName());
+                Log.d("DEBUG123", "address: " + device.getAddress());
+
                 try {
-                    if (device.getName().equals("SmartVanity-Udoo2018")) {
+                    if (device.getAddress().equals("1C:4D:70:A3:30:62")) {
                         mBluetoothAdapter.cancelDiscovery();
 
                         device.createBond();
@@ -117,16 +125,14 @@ public class controllerFragment extends Fragment {
                         mBTDevice = device;
                         mBluetoothConnection = new BluetoothConnectionService(getActivity());
 
-
-
                         startConnection();
 
-                        enableButton(true);
+//                        enableButton(true);
 
                         mProgressDialog.dismiss();
                     }
                 } catch (Exception e) {
-
+                    Log.d("DEBUG123", "broadcast3 error");
                 }
             }
         }
@@ -208,15 +214,6 @@ public class controllerFragment extends Fragment {
         mbtnDiscover = (Button) getView().findViewById(R.id.btnFindUnpairedDevices);
 
 
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                byte[] bytes = etSend.getText().toString().getBytes(Charset.defaultCharset());
-                mBluetoothConnection.write(bytes);
-                etSend.setText("");
-            }
-        });
-
         mbtnDiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -228,9 +225,11 @@ public class controllerFragment extends Fragment {
         SharedPreferences id_sharedpreferences = this.getActivity().getSharedPreferences("id", Context.MODE_PRIVATE);
         uid = id_sharedpreferences.getString("uid", "");
 
-//        database = FirebaseDatabase.getInstance();
-//        myRef = database.getReference("users");
-//        myRef = myRef.child(uid).child("control").child("controller");
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("users");
+        myRef = myRef.child(uid).child("control").child("controller");
+
+        count = 0;
 
         leftButton = getView().findViewById(R.id.button_left);
         dleftButton = getView().findViewById(R.id.button_dleft);
@@ -247,31 +246,34 @@ public class controllerFragment extends Fragment {
         clickButton = getView().findViewById(R.id.button_click);
         endButton = getView().findViewById(R.id.button_end);
 
-        enableButton(false);
+//        enableButton(false);
 //        count = 0;
 
         leftButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // left
-                byte[] bytes = "!01".getBytes(Charset.defaultCharset());
-                mBluetoothConnection.write(bytes);
+                myRef.setValue("@01" + count);
+                Log.d(TAG, "left");
+                count++;
             }
         });
         dleftButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // double left
-                byte[] bytes = "!02".getBytes(Charset.defaultCharset());
-                mBluetoothConnection.write(bytes);
+                myRef.setValue("@02" + count);
+                Log.d(TAG, "dleft");
+                count++;
             }
         });
         tleftButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // triple left
-                byte[] bytes = "!03".getBytes(Charset.defaultCharset());
-                mBluetoothConnection.write(bytes);
+                myRef.setValue("@03" + count);
+                Log.d(TAG, "tleft");
+                count++;
             }
         });
 
@@ -279,24 +281,27 @@ public class controllerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // right
-                byte[] bytes = "!04".getBytes(Charset.defaultCharset());
-                mBluetoothConnection.write(bytes);
+                myRef.setValue("@04" + count);
+                Log.d(TAG, "right");
+                count++;
             }
         });
         drightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // double right
-                byte[] bytes = "!05".getBytes(Charset.defaultCharset());
-                mBluetoothConnection.write(bytes);
+                myRef.setValue("@05" + count);
+                Log.d(TAG, "dright");
+                count++;
             }
         });
         trightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // triple right
-                byte[] bytes = "!06".getBytes(Charset.defaultCharset());
-                mBluetoothConnection.write(bytes);
+                myRef.setValue("@06" + count);
+                Log.d(TAG, "tright");
+                count++;
             }
         });
 
@@ -304,24 +309,27 @@ public class controllerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // up
-                byte[] bytes = "!07".getBytes(Charset.defaultCharset());
-                mBluetoothConnection.write(bytes);
+                myRef.setValue("@07" + count);
+                Log.d(TAG, "up");
+                count++;
             }
         });
         dupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // double up
-                byte[] bytes = "!08".getBytes(Charset.defaultCharset());
-                mBluetoothConnection.write(bytes);
+                myRef.setValue("@08" + count);
+                Log.d(TAG, "dup");
+                count++;
             }
         });
         tupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // triple up
-                byte[] bytes = "!09".getBytes(Charset.defaultCharset());
-                mBluetoothConnection.write(bytes);
+                myRef.setValue("@09" + count);
+                Log.d(TAG, "tup");
+                count++;
             }
         });
 
@@ -329,46 +337,64 @@ public class controllerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // down
-                byte[] bytes = "!10".getBytes(Charset.defaultCharset());
-                mBluetoothConnection.write(bytes);
+                myRef.setValue("@10" + count);
+                Log.d(TAG, "down");
+                count++;
             }
         });
         ddownButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // double down
-                byte[] bytes = "!11".getBytes(Charset.defaultCharset());
-                mBluetoothConnection.write(bytes);;
+                myRef.setValue("@11" + count);
+                Log.d(TAG, "ddown");
+                count++;
             }
         });
         tdownButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // triple down
-                byte[] bytes = "!12".getBytes(Charset.defaultCharset());
-                mBluetoothConnection.write(bytes);
+                myRef.setValue("@12" + count);
+                Log.d(TAG, "tdown");
+                count++;
             }
         });
 
         clickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // triple right
-                byte[] bytes = "!13".getBytes(Charset.defaultCharset());
-                mBluetoothConnection.write(bytes);
+                // click
+                myRef.setValue("@13" + count);
+                Log.d(TAG, "click");
+                count++;
             }
         });
 
-        endButton.setOnClickListener(new View.OnClickListener() {
+        btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                // triple right
-                byte[] bytes = "!14".getBytes(Charset.defaultCharset());
-                mBluetoothConnection.write(bytes);
-                mBluetoothConnection.stop();
-                enableButton(false);
+            public void onClick(View view) {
+                myRef = myRef.getParent().child("input");
+                myRef.setValue(etSend.getText().toString());
+
+                etSend.setText("");
+
+                myRef = myRef.getParent().child("controller");
+                myRef.setValue("@14" + count);
+                count++;
             }
         });
+//
+//        endButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // triple right
+//                byte[] bytes = "!14".getBytes(Charset.defaultCharset());
+//                mBluetoothConnection.write(bytes);
+//                mBluetoothConnection.stop();
+//                enableButton(false);
+//            }
+//        });
 
 //        sendButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -383,6 +409,7 @@ public class controllerFragment extends Fragment {
 //                count++;
 //            }
 //        });
+
         mBackgroundImageView = (ImageView) getView().findViewById(R.id.activity_controller_background_image_view);
 
         if (mBackgroundBlurred) {
@@ -404,7 +431,7 @@ public class controllerFragment extends Fragment {
 
 
         if (mBTDevice != null && mBTDevice.getBondState() == BluetoothDevice.BOND_BONDED){
-            enableButton(true);
+//            enableButton(true);
         }
     }
 
@@ -429,7 +456,7 @@ public class controllerFragment extends Fragment {
         mProgressDialog = ProgressDialog.show(getContext(),"Connecting Bluetooth"
                 ,"Please Wait...",true);
 
-        mBluetoothAdapter.enable();
+//        mBluetoothAdapter.enable();
 
         if(mBluetoothAdapter.isDiscovering()){
             mBluetoothAdapter.cancelDiscovery();
