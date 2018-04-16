@@ -5,8 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:columnWidth="90dp"
-    android:numColumns="6"
-    android:verticalSpacing="75dp"
+    android:numColumns="4"
+    android:verticalSpacing="64dp"
     android:horizontalSpacing="0dp"
     android:stretchMode="columnWidth"
-    android:gravity="center" />
+    android:gravity="center"
+    android:paddingTop="32dp"
+    android:background="@drawable/background"/>
