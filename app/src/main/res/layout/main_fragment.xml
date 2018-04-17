@@ -24,13 +24,13 @@ android:id="@+id/drawer_layout">
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/background" />
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    </RelativeLayout>
+    </AbsoluteLayout>
 
 
     <Button

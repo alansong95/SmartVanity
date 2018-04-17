@@ -15,11 +15,12 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
+import android.widget.AbsoluteLayout;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -28,9 +29,16 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 public class MainFragment extends Fragment {
-    Context context = getActivity();
+    private final int numRows = 8;
+    private final int numCols = 6;
 
-    int height, width;
+    // from monitor
+    int height;
+    int width;
+    int sbc_height = 1848;
+    int sbc_width = 1080;
+
+    Context context = getActivity();
 
     ViewGroup mainLayout;
 
@@ -47,9 +55,16 @@ public class MainFragment extends Fragment {
     ArrayList<Integer> posListT;
     ArrayList<Integer> appWidgetIdList;
 
+    ArrayList<Integer> sbc_posListL;
+    ArrayList<Integer> sbc_posListT;
+
+    ArrayList<Integer> rowSizeList;
+    ArrayList<Integer> colSizeList;
+
+
     Gson gson;
 
-    RelativeLayout.LayoutParams params;
+    AbsoluteLayout.LayoutParams params;
 
     AppWidgetProviderInfo newInfo;
     int newAppWidgetId;
@@ -70,6 +85,13 @@ public class MainFragment extends Fragment {
         posListL = new ArrayList<>();
         posListT = new ArrayList<>();
         appWidgetIdList = new ArrayList<>();
+
+
+        sbc_posListL = new ArrayList<>();
+        sbc_posListT = new ArrayList<>();
+
+        rowSizeList = new ArrayList<>();
+        colSizeList = new ArrayList<>();
 
         // get screen width and height
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -92,6 +114,8 @@ public class MainFragment extends Fragment {
     public void onStart() {
         super.onStart();
         //mAppWidgetHost.startListening();
+
+        Log.d("DEBUG123", "LoL");
 
         initialize();
 
@@ -214,10 +238,18 @@ public class MainFragment extends Fragment {
             String key_id = "id" + i;
             String key_positionL = "positionL" + i;
             String key_positionT = "positionT" + i;
+            String key_sbc_positionL = "sbc_positionL" + i;
+            String key_sbc_positionT = "sbc_positionT" + i;
+            String key_rowSize = "rowSize" + i;
+            String key_colSize = "colSize" + i;
 
             editor.putInt(key_id, appWidgetIdList.get(i));
             editor.putInt(key_positionL, posListL.get(i));
             editor.putInt(key_positionT, posListT.get(i));
+            editor.putInt(key_sbc_positionL, sbc_posListL.get(i));
+            editor.putInt(key_sbc_positionT, sbc_posListT.get(i));
+            editor.putInt(key_rowSize, rowSizeList.get(i));
+            editor.putInt(key_colSize, colSizeList.get(i));
         }
         editor.commit();
     }
@@ -230,8 +262,10 @@ public class MainFragment extends Fragment {
     public void putWidget() {
         int appWidgetId;
         AppWidgetProviderInfo info;
-        RelativeLayout.LayoutParams params;
+        AbsoluteLayout.LayoutParams params;
         AppWidgetHostView hostView;
+
+        mainLayout.removeAllViews();
 
 
         for (int i = 0; i < widgetCount; i++) {
@@ -241,9 +275,11 @@ public class MainFragment extends Fragment {
             hostView = mAppWidgetHost.createView(this.getActivity().getApplicationContext(), appWidgetId, info);
             hostView.setAppWidget(appWidgetId, info);
 
-            params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
-            params.leftMargin = posListL.get(i);
-            params.topMargin = posListT.get(i);
+            params = new AbsoluteLayout.LayoutParams(rowSizeList.get(i) * width / numCols, colSizeList.get(i) * height / numRows, posListL.get(i), posListT.get(i));
+
+
+//            params.leftMargin = posListL.get(i);
+//            params.topMargin = posListT.get(i);
 
             hostView.setId(appWidgetId);
 
@@ -283,10 +319,10 @@ public class MainFragment extends Fragment {
             info = AppWidgetManager.getInstance(this.getActivity().getApplicationContext()).getAppWidgetInfo(appWidgetIdList.get(i));
 
             myRef = myRef.getParent().getParent().child("positionL").child("val" + i);
-            myRef.setValue(posListL.get(i));
+            myRef.setValue(sbc_posListL.get(i));
 
             myRef = myRef.getParent().getParent().child("positionT").child("val" + i);
-            myRef.setValue(posListT.get(i));
+            myRef.setValue(sbc_posListT.get(i));
 
             myRef = myRef.getParent().getParent().child("provider").child("val" + i);
             myRef.setValue(gson.toJson(info.provider));
@@ -317,18 +353,38 @@ public class MainFragment extends Fragment {
 
     private void setPosition(Intent data) {
         int position = data.getExtras().getInt("position");
+        int rowSize = data.getExtras().getInt("rowSize");
+        int colSize = data.getExtras().getInt("colSize");
+
+        Log.d("DEBUG123", "rowSize: " + rowSize);
+        Log.d("DEBUG123", "colSize: " + colSize);
 
         int left;
         int top;
-        left = (position % 6) * width / 6;
-        top = position * height / 6 / 6;
+        left = (position % numCols) * width / numCols;
+        top = (position / numCols) * height / numRows;
+
+        int sbc_left;
+        int sbc_top;
+        sbc_left = (position % numCols) * sbc_width / numCols;
+        sbc_top = (position / numCols) * sbc_height / numRows;
 
         posListL.add(left);
         posListT.add(top);
 
-        params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params.leftMargin = left;
-        params.topMargin = top;
+        sbc_posListL.add(sbc_left);
+        sbc_posListT.add(sbc_top);
+
+        rowSizeList.add(rowSize);
+        colSizeList.add(colSize);
+
+//        params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params = new AbsoluteLayout.LayoutParams(rowSize * width / numCols, colSize * height / numRows, left, top);
+
+        Log.d("DEBUG123", "kk: " +  rowSize * width / numCols);
+        Log.d("DEBUG123", "kk: " + colSize * height / numRows);
+//        params.leftMargin = left;
+//        params.topMargin = top;
 
         handleAddNewAppWidget(newAppWidgetId, newInfo);
     }
@@ -339,6 +395,10 @@ public class MainFragment extends Fragment {
                 appWidgetIdList.add(sharedpreferences.getInt("id" + i, -1));
                 posListL.add(sharedpreferences.getInt("positionL" + i, -1));
                 posListT.add(sharedpreferences.getInt("positionT" + i, -1));
+                sbc_posListL.add(sharedpreferences.getInt("sbc_positionL" + i, -1));
+                sbc_posListT.add(sharedpreferences.getInt("sbc_positionT" + i, -1));
+                rowSizeList.add(sharedpreferences.getInt("rowSize" + i, -1));
+                colSizeList.add(sharedpreferences.getInt("colSize" + i, -1));
             }
         }
     }
@@ -348,6 +408,9 @@ public class MainFragment extends Fragment {
 
         posListL.remove(index);
         posListT.remove(index);
+
+        sbc_posListL.remove(index);
+        sbc_posListT.remove(index);
         appWidgetIdList.remove(index);
         widgetCount--;
 

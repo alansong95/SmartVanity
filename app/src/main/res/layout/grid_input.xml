@@ -35,7 +35,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:digits="0123456789"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:id="@+id/row_input"/>
 
         </LinearLayout>
 
@@ -53,7 +54,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:digits="0123456789"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:id="@+id/col_input"/>
 
         </LinearLayout>
     </LinearLayout>

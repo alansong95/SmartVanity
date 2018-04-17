@@ -1,13 +1,18 @@
 package com.example.alan.smartvanity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 
@@ -18,6 +23,10 @@ public class Grid extends AppCompatActivity {
     ImageView mBackgroundImageView;
     private boolean mBackgroundBlurred = false;
     Context context;
+
+    private int finalRowInput = 0;
+    private int finalColInput = 0;
+    private int finalPosition = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,15 +43,48 @@ public class Grid extends AppCompatActivity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
+                finalPosition = position;
 
-                returnIntent.putExtra("position", position);
+                AlertDialog.Builder builder = new AlertDialog.Builder(Grid.this);
+                builder.setTitle("Choose Size");
+
+                View viewInflated = LayoutInflater.from(Grid.this).inflate(R.layout.grid_input, (ViewGroup) findViewById(R.id.root_grid_view), false);
+
+                final EditText rowInput = (EditText) viewInflated.findViewById(R.id.row_input);
+                final EditText colInput = (EditText) viewInflated.findViewById(R.id.col_input);
+
+                builder.setView(viewInflated);
+
+
+                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finalRowInput = Integer.parseInt(rowInput.getText().toString());
+                        finalColInput = Integer.parseInt(colInput.getText().toString());
+
+//                        returnIntent.putExtra("position", finalPosition);
+//                        returnIntent.putExtra("rowSize", finalRowInput);
+//                        returnIntent.putExtra("colSize", finalColInput);
+//                        setResult(RESULT_OK, returnIntent);
+//                        finish();
+                    }
+                });
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.show();
+
 //                SharedPreferences sharedpreferences = getSharedPreferences("data", Context.MODE_PRIVATE);
 //                SharedPreferences.Editor editor = sharedpreferences.edit();
 //                editor.putInt("NewIntent", 1);
 //                editor.commit();
 
-                setResult(RESULT_OK, returnIntent);
-                finish();
+
+
             }
         });
 
