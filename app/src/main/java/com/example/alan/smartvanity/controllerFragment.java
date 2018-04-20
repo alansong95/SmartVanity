@@ -202,6 +202,8 @@ public class controllerFragment extends Fragment {
         seekBar = getView().findViewById(R.id.seekBar);
         seekBar.setMax(10);
 
+        endButton = getView().findViewById(R.id.end_button);
+
 //        enableButton(false);
 //        count = 0;
 
@@ -365,16 +367,15 @@ public class controllerFragment extends Fragment {
             }
         });
 //
-//        endButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // triple right
-//                byte[] bytes = "!14".getBytes(Charset.defaultCharset());
-//                mBluetoothConnection.write(bytes);
-//                mBluetoothConnection.stop();
-//                enableButton(false);
-//            }
-//        });
+        endButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // end video
+                myRef = myRef.getParent().child("controller");
+                myRef.setValue("@16" + count);
+                count++;
+            }
+        });
 
 //        sendButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
