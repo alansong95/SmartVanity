@@ -1,11 +1,14 @@
 package com.example.alan.smartvanity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+
+import com.google.gson.Gson;
 
 /**
  * Created by Alan on 2/9/2018.
@@ -14,8 +17,36 @@ import android.widget.ImageView;
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
 
+    final int numGrid = 48;
+
+    SharedPreferences gridSharedpreferences;
+
+    Gson gson;
+
+    boolean[] gridMap;
+
+    private Integer[] mThumbIds = new Integer[numGrid];
+
     public ImageAdapter(Context c) {
         mContext = c;
+
+        gson = new Gson();
+
+        gridSharedpreferences = mContext.getSharedPreferences("grid", Context.MODE_PRIVATE);
+        gridMap = gson.fromJson(gridSharedpreferences.getString("map", ""), boolean[].class);
+
+        if (gridMap == null) {
+            gridMap = new boolean[48];
+        }
+
+        for (int i = 0; i < numGrid; i++) {
+            if (gridMap[i] == true) {
+                mThumbIds[i] = R.drawable.notgrid;
+            } else {
+                mThumbIds[i] = R.drawable.grid;
+            }
+        }
+
     }
 
     public int getCount() {
@@ -48,58 +79,58 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     // references to  images
-    private Integer[] mThumbIds = {
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-            R.drawable.grid,
-    };
+//    private Integer[] mThumbIds = {
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//            R.drawable.grid,
+//    };
 }

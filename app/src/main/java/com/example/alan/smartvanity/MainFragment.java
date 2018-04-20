@@ -73,11 +73,24 @@ public class MainFragment extends Fragment {
 
     private DrawerLayout mDrawerLayout;
 
+    SharedPreferences gridSharedpreferences;
+
+    boolean[] gridMap;
+    ArrayList<Integer> posList;
+
+
     public void initialize() {
         gson = new Gson();
 
         id_sharedpreferences = this.getActivity().getSharedPreferences("id", Context.MODE_PRIVATE);
         sharedpreferences = this.getActivity().getSharedPreferences("data", Context.MODE_PRIVATE);
+        gridSharedpreferences = this.getActivity().getSharedPreferences("grid", Context.MODE_PRIVATE);
+
+        gridMap = gson.fromJson(gridSharedpreferences.getString("map", ""), boolean[].class);
+
+        if (gridMap == null) {
+            gridMap = new boolean[48];
+        }
 
         widgetCount = sharedpreferences.getInt("WidgetCount", 0);
 
@@ -92,6 +105,8 @@ public class MainFragment extends Fragment {
 
         rowSizeList = new ArrayList<>();
         colSizeList = new ArrayList<>();
+
+        posList = new ArrayList<>();
 
         // get screen width and height
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -242,6 +257,7 @@ public class MainFragment extends Fragment {
             String key_sbc_positionT = "sbc_positionT" + i;
             String key_rowSize = "rowSize" + i;
             String key_colSize = "colSize" + i;
+            String key_pos = "pos" + i;
 
             editor.putInt(key_id, appWidgetIdList.get(i));
             editor.putInt(key_positionL, posListL.get(i));
@@ -250,6 +266,7 @@ public class MainFragment extends Fragment {
             editor.putInt(key_sbc_positionT, sbc_posListT.get(i));
             editor.putInt(key_rowSize, rowSizeList.get(i));
             editor.putInt(key_colSize, colSizeList.get(i));
+            editor.putInt(key_pos, posList.get(i));
         }
         editor.commit();
     }
@@ -385,6 +402,7 @@ public class MainFragment extends Fragment {
 
         rowSizeList.add(rowSize);
         colSizeList.add(colSize);
+        posList.add(position);
 
 //        params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
         params = new AbsoluteLayout.LayoutParams(rowSize * width / numCols, colSize * height / numRows, left, top);
@@ -407,12 +425,16 @@ public class MainFragment extends Fragment {
                 sbc_posListT.add(sharedpreferences.getInt("sbc_positionT" + i, -1));
                 rowSizeList.add(sharedpreferences.getInt("rowSize" + i, -1));
                 colSizeList.add(sharedpreferences.getInt("colSize" + i, -1));
+                posList.add(sharedpreferences.getInt("pos" + i, -1));
             }
         }
     }
 
     public void deleteWidget(int index) {
         mainLayout.getChildAt(index).setVisibility(View.GONE);
+
+        updateGridMap(rowSizeList.get(index),colSizeList.get(index), posList.get(index));
+        saveGridMap();
 
         posListL.remove(index);
         posListT.remove(index);
@@ -421,6 +443,7 @@ public class MainFragment extends Fragment {
         appWidgetIdList.remove(index);
         rowSizeList.remove(index);
         colSizeList.remove(index);
+        posList.remove(index);
 
         widgetCount--;
 
@@ -428,4 +451,26 @@ public class MainFragment extends Fragment {
         saveData();
         refresh();
     }
+
+    private void updateGridMap(int width, int height, int pos) {
+        for (int i = pos/numCols; i < pos/numCols + height; i++) {
+            for (int j = pos%numCols; j < pos%numCols + width; j++) {
+                Log.d("DEBUG22", "i: " + i);
+                Log.d("DEBUG22", "j: " + j);
+                gridMap[6*i+j] = false;
+            }
+        }
+    }
+
+    private void saveGridMap() {
+        SharedPreferences.Editor editor = gridSharedpreferences.edit();
+        editor.clear().commit();
+
+        String key = "map";
+        String val = gson.toJson(gridMap);
+        editor.putString(key, val);
+
+        editor.commit();
+    }
+
 }
