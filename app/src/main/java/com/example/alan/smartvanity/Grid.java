@@ -63,11 +63,17 @@ public class Grid extends AppCompatActivity {
                         finalRowInput = Integer.parseInt(rowInput.getText().toString());
                         finalColInput = Integer.parseInt(colInput.getText().toString());
 
-//                        returnIntent.putExtra("position", finalPosition);
-//                        returnIntent.putExtra("rowSize", finalRowInput);
-//                        returnIntent.putExtra("colSize", finalColInput);
-//                        setResult(RESULT_OK, returnIntent);
-//                        finish();
+                        returnIntent.putExtra("position", finalPosition);
+                        returnIntent.putExtra("rowSize", finalRowInput);
+                        returnIntent.putExtra("colSize", finalColInput);
+
+
+                        Log.d("DEBUG22", "Grid: rowSize: " + finalRowInput);
+                        Log.d("DEBUG22", "Grid: colSize: " + finalColInput);
+
+
+                        setResult(RESULT_OK, returnIntent);
+                        finish();
                     }
                 });
                 builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {

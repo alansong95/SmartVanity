@@ -277,6 +277,8 @@ public class MainFragment extends Fragment {
 
             params = new AbsoluteLayout.LayoutParams(rowSizeList.get(i) * width / numCols, colSizeList.get(i) * height / numRows, posListL.get(i), posListT.get(i));
 
+            Log.d("DEBUG22", "kk: " +  rowSizeList.get(i) * width / numCols);
+            Log.d("DEBUG22", "kk: " + colSizeList.get(i) * height / numRows);
 
 //            params.leftMargin = posListL.get(i);
 //            params.topMargin = posListT.get(i);
@@ -329,6 +331,12 @@ public class MainFragment extends Fragment {
 
             myRef = myRef.getParent().getParent().child("id").child("val" + i);
             myRef.setValue(appWidgetIdList.get(i));
+
+            myRef = myRef.getParent().getParent().child("rowSize").child("val" + i);
+            myRef.setValue(rowSizeList.get(i) * sbc_width / numCols);
+
+            myRef = myRef.getParent().getParent().child("colSize").child("val" + i);
+            myRef.setValue(colSizeList.get(i) * sbc_height / numRows);
         }
         myRef = myRef.getParent().getParent().child("updated");
         myRef.setValue(true);
@@ -408,10 +416,12 @@ public class MainFragment extends Fragment {
 
         posListL.remove(index);
         posListT.remove(index);
-
         sbc_posListL.remove(index);
         sbc_posListT.remove(index);
         appWidgetIdList.remove(index);
+        rowSizeList.remove(index);
+        colSizeList.remove(index);
+
         widgetCount--;
 
         //Toast.makeText(MainFragment.this, "hello", Toast.LENGTH_SHORT).show();
