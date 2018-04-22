@@ -16,5 +16,43 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="SVAlertDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:background">#00FFFFFF</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">@font/circular</item>
+        <item name="android:textSize">18dp</item>
+    </style>
+
+    <style name="SVButton" parent="@android:style/Widget.Holo.Button.Borderless">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:fontFamily">@font/circular</item>
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:textSize">18dp</item>
+    </style>
+
+    <style name="Widget.SmartVanity.ActionBar.Solid" parent="@android:style/Widget.Holo.ActionBar.Solid">
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="DialogWindowTitle.SmartVanity" parent="@style/DialogWindowTitle_Holo">
+        <item name="android:textAppearance">@style/TextAppearance.SmartVanity.DialogWindowTitle</item>
+    </style>
+
+    <style name="TextAppearance.SmartVanity.DialogWindowTitle" parent="@android:style/TextAppearance.Holo.DialogWindowTitle">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:fontFamily">@font/circular</item>
+    </style>
+
+    <style name="Widget.SmartVanity.Button.Borderless" parent="@android:style/Widget.Holo.Button.Borderless">
+        <item name="android:textColor">@android:color/holo_blue_light</item>
+        <item name="android:textAppearance">@style/TextAppearance.SmartVanity.DialogButton</item>
+    </style>
+
+    <style name="TextAppearance.SmartVanity.DialogButton" parent="@android:style/TextAppearance.Holo.Medium"></style>
+
+    <style name="SmartVanity.ButtonBar.AlertDialog" parent="@android:style/Holo.ButtonBar.AlertDialog">
+        <item name="android:background">@android:color/holo_purple</item>
+    </style>
+
 
 </resources>

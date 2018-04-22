@@ -72,8 +72,8 @@ public class Grid extends AppCompatActivity {
                 } else {
                     finalPosition = position;
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Grid.this);
-                    builder.setTitle("Choose Size");
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Grid.this, R.style.Theme_SmartVanity);
+                    //builder.setTitle("Choose Size");
 
                     View viewInflated = LayoutInflater.from(Grid.this).inflate(R.layout.grid_input, (ViewGroup) findViewById(R.id.root_grid_view), false);
 
@@ -105,6 +105,7 @@ public class Grid extends AppCompatActivity {
                             finish();
                         }
                     });
+
                     builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

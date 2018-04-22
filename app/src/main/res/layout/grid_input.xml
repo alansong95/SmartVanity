@@ -19,43 +19,68 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/shape"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:fontFamily="@font/circularbold"
+            android:text="Select Size"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="22dp">
+        </TextView>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp"
+            android:gravity="center">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
-                android:text="Width: "/>
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/circularbold"
+                android:layout_marginRight="10dp"
+                android:text="Width:"/>
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="44dp"
                 android:digits="0123456789"
                 android:inputType="numberDecimal"
-                android:id="@+id/row_input"/>
+                android:fontFamily="@font/circularbold"
+                android:id="@+id/row_input"
+                android:background="@drawable/textfieldbackground"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
-                android:text="Height: "/>
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/circularbold"
+                android:layout_marginRight="10dp"
+                android:text="Height:"/>
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="44dp"
                 android:digits="0123456789"
                 android:inputType="numberDecimal"
-                android:id="@+id/col_input"/>
+                android:fontFamily="@font/circularbold"
+                android:id="@+id/col_input"
+                android:background="@drawable/textfieldbackground"/>
 
         </LinearLayout>
     </LinearLayout>

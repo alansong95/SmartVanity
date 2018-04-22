@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.SmartVanity" parent="@android:style/Theme.Holo">
+        <item name="android:actionBarStyle">@style/Widget.SmartVanity.ActionBar.Solid</item>
+        <item name="android:alertDialogTheme">@style/Theme_SmartVanity_Dialog_Alert</item>
+    </style>
+    <!-- Local copy of android:Theme.Holo.Dialog.Alert -->
+    <style name="Theme_Holo_Dialog_Alert" parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowTitleStyle">@style/DialogWindowTitle_Holo</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
+        <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
+    </style>
+
+    <!-- Local copy of android:DialogWindowTitle.Holo -->
+    <style name="DialogWindowTitle_Holo">
+        <item name="android:maxLines">1</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Holo.DialogWindowTitle</item>
+    </style>
+
+    <style name="Theme_SmartVanity_Dialog_Alert" parent="@style/Theme_Holo_Dialog_Alert">
+        <item name="android:windowTitleStyle">@style/DialogWindowTitle.SmartVanity</item>
+        <item name="android:borderlessButtonStyle">@style/Widget.SmartVanity.Button.Borderless</item>
+        <item name="android:buttonBarStyle">@style/SmartVanity.ButtonBar.AlertDialog</item>
+    </style>
+
+
+
+</resources>
