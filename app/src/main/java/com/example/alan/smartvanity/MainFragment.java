@@ -409,6 +409,9 @@ public class MainFragment extends Fragment {
 
         Log.d("DEBUG123", "kk: " +  rowSize * width / numCols);
         Log.d("DEBUG123", "kk: " + colSize * height / numRows);
+        Log.d("DEBUG123", "kk: " + left);
+        Log.d("DEBUG123", "kk: " + top);
+
 //        params.leftMargin = left;
 //        params.topMargin = top;
 

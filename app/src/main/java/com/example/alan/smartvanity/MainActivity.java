@@ -73,6 +73,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //if the other fragment is visible, hide it.
                 fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("controller")).commit();
             }
+            if(fragmentManager.findFragmentByTag("vid_controller") != null){
+                //if the other fragment is visible, hide it.
+                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("vid_controller")).commit();
+            }
 
         } else if (id == R.id.nav_controller) {
             if (fragmentManager.findFragmentByTag("controller") == null) {
@@ -84,7 +88,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //if the other fragment is visible, hide it.
                 fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("home")).commit();
             }
+            if(fragmentManager.findFragmentByTag("vid_controller") != null){
+                //if the other fragment is visible, hide it.
+                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("vid_controller")).commit();
+            }
 
+        } else if (id == R.id.vid_controller) {
+            if (fragmentManager.findFragmentByTag("vid_controller") == null) {
+                fragmentManager.beginTransaction().add(R.id.content_frame, new videoControllerFragment(), "vid_controller").commit();
+            } else {
+                fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("vid_controller")).commit();
+            }
+            if (fragmentManager.findFragmentByTag("home") != null) {
+                //if the other fragment is visible, hide it.
+                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("home")).commit();
+            }
+            if(fragmentManager.findFragmentByTag("controller") != null){
+                //if the other fragment is visible, hide it.
+                fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("controller")).commit();
+            }
         } else if (id == R.id.nav_about_us) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new AboutUsFragment()).commit();
         } else if (id == R.id.nav_logout) {

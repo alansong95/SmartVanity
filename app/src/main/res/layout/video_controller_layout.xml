@@ -10,8 +10,8 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/activity_login_background_image_view"
-            android:layout_width="fill_parent"
+            android:id="@+id/activity_controller_background_image_view"
+            android:layout_width="match_parent"
             android:layout_height="511dp"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -24,7 +24,7 @@
 
         <LinearLayout
             android:id="@+id/linearLayout4"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="256dp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
@@ -88,12 +88,12 @@
             android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:background="@drawable/rewind_button"
-            app:layout_constraintBottom_toBottomOf="@+id/button4"
-            app:layout_constraintEnd_toStartOf="@+id/button4"
-            app:layout_constraintTop_toTopOf="@+id/button4" />
+            app:layout_constraintBottom_toBottomOf="@+id/play_button"
+            app:layout_constraintEnd_toStartOf="@+id/play_button"
+            app:layout_constraintTop_toTopOf="@+id/play_button" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/play_button"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginBottom="64dp"
@@ -107,19 +107,19 @@
 
         <Button
             android:id="@+id/button3"
-            android:layout_width="65"
-            android:layout_height="44"
+            android:layout_width="65dp"
+            android:layout_height="44dp"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:background="@drawable/fastforward_button"
-            app:layout_constraintBottom_toBottomOf="@+id/button4"
-            app:layout_constraintStart_toEndOf="@+id/button4"
-            app:layout_constraintTop_toTopOf="@+id/button4" />
+            app:layout_constraintBottom_toBottomOf="@+id/play_button"
+            app:layout_constraintStart_toEndOf="@+id/play_button"
+            app:layout_constraintTop_toTopOf="@+id/play_button" />
 
         <SeekBar
-            android:id="@+id/seekBar3"
+            android:id="@+id/volume_rocker"
             android:layout_width="256dp"
             android:layout_height="32dp"
             android:layout_marginBottom="8dp"
@@ -137,7 +137,7 @@
             android:layout_height="32dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            app:layout_constraintBottom_toBottomOf="@+id/seekBar3"
+            app:layout_constraintBottom_toBottomOf="@+id/volume_rocker"
             app:layout_constraintEnd_toEndOf="@+id/linearLayout4"
             app:srcCompat="@drawable/volume_up_red" />
 
@@ -147,7 +147,7 @@
             android:layout_height="32dp"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            app:layout_constraintBottom_toBottomOf="@+id/seekBar3"
+            app:layout_constraintBottom_toBottomOf="@+id/volume_rocker"
             app:layout_constraintStart_toStartOf="@+id/linearLayout4"
             app:srcCompat="@drawable/volume_down_red" />
 

@@ -8,6 +8,8 @@
             android:title="My Mirror" />
         <item android:id="@+id/nav_controller"
             android:title="Controller"/>
+        <item android:id="@+id/vid_controller"
+            android:title="Video Controller"/>
         <item android:id="@+id/nav_about_us"
             android:title="About Us" />
         <item android:id="@+id/nav_logout"
