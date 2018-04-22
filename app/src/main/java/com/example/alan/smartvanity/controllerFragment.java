@@ -162,34 +162,32 @@ public class controllerFragment extends Fragment {
         seekBar = getView().findViewById(R.id.seekBar);
         seekBar.setMax(10);
 
-        endButton = getView().findViewById(R.id.end_button);
-
 //        enableButton(false);
 //        count = 0;
 
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                Log.d("DEBUG345", seekBar.getProgress() + "");
-
-                myRef = myRef.getParent().child("sound");
-                myRef.setValue(seekBar.getProgress());
-
-                myRef = myRef.getParent().child("controller");
-                myRef.setValue("@15" + count);
-                count++;
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
+//        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+//                Log.d("DEBUG345", seekBar.getProgress() + "");
+//
+//                myRef = myRef.getParent().child("sound");
+//                myRef.setValue(seekBar.getProgress());
+//
+//                myRef = myRef.getParent().child("controller");
+//                myRef.setValue("@15" + count);
+//                count++;
+//            }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//        });
 
         leftButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -327,15 +325,15 @@ public class controllerFragment extends Fragment {
             }
         });
 //
-        endButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // end video
-                myRef = myRef.getParent().child("controller");
-                myRef.setValue("@16" + count);
-                count++;
-            }
-        });
+//        endButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // end video
+//                myRef = myRef.getParent().child("controller");
+//                myRef.setValue("@16" + count);
+//                count++;
+//            }
+//        });
 
 //        sendButton.setOnClickListener(new View.OnClickListener() {
 //            @Override

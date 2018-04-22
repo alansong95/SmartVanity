@@ -41,6 +41,10 @@ public class videoControllerFragment extends Fragment {
     int count;
 
     Button playButton;
+    Button forwardButton;
+    Button backButton;
+
+    boolean playButtonFlag;
 
     @Nullable
     @Override
@@ -58,7 +62,6 @@ public class videoControllerFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-
         mBackgroundImageView = (ImageView) getView().findViewById(R.id.activity_controller_background_image_view);
 
         if (mBackgroundBlurred) {
@@ -72,10 +75,11 @@ public class videoControllerFragment extends Fragment {
 
         count = 0;
 
+        database = FirebaseDatabase.getInstance();
         myRef = database.getReference("users");
         myRef = myRef.child(uid).child("control").child("controller");
 
-        volumeRocker = getView().findViewById(R.id.seekBar);
+        volumeRocker = getView().findViewById(R.id.volume_rocker);
         volumeRocker.setMax(10);
 
 
@@ -103,6 +107,8 @@ public class videoControllerFragment extends Fragment {
             }
         });
 
+        playButtonFlag = true;
+
         playButton = getView().findViewById(R.id.play_button);
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,8 +116,38 @@ public class videoControllerFragment extends Fragment {
                 myRef.setValue("@17" + count);
                 Log.d(TAG, "play");
                 count++;
+
+                if (playButtonFlag) {
+                    playButton.setBackgroundResource(R.drawable.play_button);
+                    playButtonFlag = false;
+                } else {
+                    playButtonFlag = true;
+                    playButton.setBackgroundResource(R.drawable.pause_button);
+                }
             }
         });
+
+        forwardButton = getView().findViewById(R.id.forward_button);
+        forwardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myRef.setValue("@18" + count);
+                Log.d(TAG, "forward");
+                count++;
+            }
+        });
+
+        backButton = getView().findViewById(R.id.back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myRef.setValue("@19" + count);
+                Log.d(TAG, "back");
+                count++;
+            }
+        });
+
+
 
     }
 
