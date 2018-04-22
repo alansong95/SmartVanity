@@ -24,7 +24,7 @@
 
         <LinearLayout
             android:id="@+id/linearLayout4"
-            android:layout_width="0dp"
+            android:layout_width="320dp"
             android:layout_height="256dp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
@@ -32,6 +32,7 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/textfieldbackground"
             android:maxWidth="400dp"
+            android:minWidth="300dp"
             android:orientation="vertical"
             android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/activity_controller_background_image_view"
