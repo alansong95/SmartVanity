@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ public class Grid extends AppCompatActivity {
     Context context;
 
     final int numCols = 6;
+    final int numRow = 8;
 
     private int finalRowInput = 0;
     private int finalColInput = 0;
@@ -42,6 +44,9 @@ public class Grid extends AppCompatActivity {
     boolean[] gridMap;
 
     Gson gson;
+
+    int height;
+    int width;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,8 +65,14 @@ public class Grid extends AppCompatActivity {
 
         printMap();
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        height = displayMetrics.heightPixels;
+        width = displayMetrics.widthPixels;
+
         GridView gridview = (GridView) findViewById(R.id.grid_view);
         gridview.setAdapter(new ImageAdapter(this));
+        gridview.setVerticalSpacing(((height)-(144*numRow))/(numRow+1) - 16);
 
         returnIntent = new Intent(this, MainActivity.class);
         //mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

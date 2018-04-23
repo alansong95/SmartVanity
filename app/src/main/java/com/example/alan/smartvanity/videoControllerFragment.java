@@ -32,6 +32,7 @@ public class videoControllerFragment extends Fragment {
     Boolean mBackgroundBlurred = false;
 
     SeekBar volumeRocker;
+    SeekBar jumpBar;
 
     DatabaseReference myRef;
     FirebaseDatabase database;
@@ -43,6 +44,7 @@ public class videoControllerFragment extends Fragment {
     Button playButton;
     Button forwardButton;
     Button backButton;
+    Button endButton;
 
     boolean playButtonFlag;
 
@@ -79,21 +81,13 @@ public class videoControllerFragment extends Fragment {
         myRef = database.getReference("users");
         myRef = myRef.child(uid).child("control").child("controller");
 
-        volumeRocker = getView().findViewById(R.id.volume_rocker);
-        volumeRocker.setMax(10);
+        jumpBar = getView().findViewById(R.id.jumpbar);
+        jumpBar.setMax(20);
 
-
-        volumeRocker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        jumpBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 Log.d("DEBUG345", seekBar.getProgress() + "");
-
-                myRef = myRef.getParent().child("sound");
-                myRef.setValue(seekBar.getProgress());
-
-                myRef = myRef.getParent().child("controller");
-                myRef.setValue("@15" + count);
-                count++;
             }
 
             @Override
@@ -103,7 +97,57 @@ public class videoControllerFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                myRef = myRef.getParent().child("controller");
+                myRef.setValue("@20" + count);
 
+                myRef = myRef.getParent().child("jump");
+                myRef.setValue(seekBar.getProgress());
+
+                myRef = myRef.getParent().child("controller");
+
+                count++;
+            }
+        });
+
+
+
+        volumeRocker = getView().findViewById(R.id.volume_rocker);
+        volumeRocker.setMax(10);
+
+
+        volumeRocker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                Log.d("DEBUG345", seekBar.getProgress() + "");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                myRef = myRef.getParent().child("controller");
+                myRef.setValue("@15" + count);
+
+                myRef = myRef.getParent().child("sound");
+                myRef.setValue(seekBar.getProgress());
+
+                myRef = myRef.getParent().child("controller");
+
+                count++;
+            }
+        });
+
+        endButton = getView().findViewById(R.id.end_button);
+        endButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // end video
+                myRef = myRef.getParent().child("controller");
+                myRef.setValue("@16" + count);
+                count++;
             }
         });
 
