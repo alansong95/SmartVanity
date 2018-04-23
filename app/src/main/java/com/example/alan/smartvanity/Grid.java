@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -72,15 +74,50 @@ public class Grid extends AppCompatActivity {
                 } else {
                     finalPosition = position;
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Grid.this, R.style.Theme_SmartVanity);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Grid.this);
                     //builder.setTitle("Choose Size");
 
-                    View viewInflated = LayoutInflater.from(Grid.this).inflate(R.layout.grid_input, (ViewGroup) findViewById(R.id.root_grid_view), false);
+                    final View viewInflated = LayoutInflater.from(Grid.this).inflate(R.layout.grid_input, (ViewGroup) findViewById(R.id.root_grid_view), false);
 
                     final EditText rowInput = (EditText) viewInflated.findViewById(R.id.row_input);
                     final EditText colInput = (EditText) viewInflated.findViewById(R.id.col_input);
+                    final Button setSizeButton = (Button) viewInflated.findViewById(R.id.setSizeButton);
+
+
+                    setSizeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (!rowInput.getText().toString().isEmpty() &&
+                                    !colInput.getText().toString().isEmpty()) {
+
+                                finalRowInput = Integer.parseInt(rowInput.getText().toString());
+                                finalColInput = Integer.parseInt(colInput.getText().toString());
+
+                                returnIntent.putExtra("position", finalPosition);
+                                returnIntent.putExtra("rowSize", finalRowInput);
+                                returnIntent.putExtra("colSize", finalColInput);
+
+
+                                Log.d("DEBUG22", "Grid: rowSize: " + finalRowInput);
+                                Log.d("DEBUG22", "Grid: colSize: " + finalColInput);
+
+                                updateGridMap(finalRowInput, finalColInput, finalPosition);
+                                saveGridMap();
+
+                                setResult(RESULT_OK, returnIntent);
+                                finish();
+                            } else {
+
+                            }
+
+                        }
+                    });
 
                     builder.setView(viewInflated);
+                    AlertDialog dialog = builder.create();
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    dialog.show();
+
 
 
                     builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -112,7 +149,8 @@ public class Grid extends AppCompatActivity {
 
                         }
                     });
-                    builder.show();
+
+                    //builder.show();
                 }
 
 
